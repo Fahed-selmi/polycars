@@ -1,0 +1,175 @@
+{% extends './base.html.twig' %}
+
+{% block title %}Véhicules{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+	<h4 class="page-title">Véhicules</h4>
+	<div class="d-flex align-items-center">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="{{ path('default_index') }}">Accueil</a></li>
+				<li class="breadcrumb-item " >Véhicules</li>
+				<li class="breadcrumb-item active" aria-current="page">{{v.vNom}}</li>
+			</ol>
+		</nav>
+	</div>
+{% endblock %}
+
+{% block topRight %}
+
+{% endblock %}
+
+{% block container %}
+<div class="container">
+	<div class="card">
+		<div class="card-body printableArea">
+			
+			<div class="row">
+				<div class="col-sm-12 col-lg-6" id="images">
+					<div id="carouselExampleIndicators" class="carousel slide m-t-20" data-ride="carousel">
+					    <div class="carousel-inner" role="listbox">
+					    {% for im in img %}
+					    	{% if im.type == 'new' %}
+					        <div class="carousel-item {% if loop.index0==1 %} active {% endif %}"> 
+					        	<img class="img-fluid" src="{{ asset('vehicules-pictures')}}/{{im.image}}" alt="{{im.image}}" style="width:100%;"> 
+					        </div>
+					        {% endif %}
+					    {% endfor %}
+					    </div>
+					    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span class="sr-only">Previous</span> </a>
+					    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span> <span class="sr-only">Next</span> </a>
+					</div>
+				</div>
+				<div class="col-sm-12 col-lg-6">
+					<h3 class="box-title m-t-20 mb-3">Info Véhicule</h3>
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<tbody>
+								<tr>
+									<td><b>Vehicule name:</b></td>
+									<td><b>{{v.vNom}}</b></td>
+								</tr>
+								<tr>
+									<td>Fabricant:</td>
+									<td> {{v.maker}} </td>
+								</tr>
+								<tr>
+									<td>Model:</td>
+									<td> {{v.model}} </td>
+								</tr>
+								<tr>
+									<td>Status:</td>
+									{% if v.status == "Active" %}
+									<td> <span class="label label-success font-weight-100">{{v.status}}</span> </td>
+									{% endif %}
+									{% if v.status == "En Panne" %}
+									<td> <span class="label label-danger font-weight-100">{{v.status}}</span> </td>
+									{% endif %}
+									{% if v.status == "En Maintenance" %}
+									<td> <span class="label label-warning font-weight-100">{{v.status}}</span> </td>
+									{% endif %}
+								</tr>
+								<tr>
+									<td>Groupe:</td>
+									<td> {{v.groupe}} </td>
+								</tr>
+								<tr>
+									<td>Matricule:</td>
+									<td> {{v.matricule}} </td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<h3 class="box-title m-t-40">Info Général</h3>
+			<div class="table-responsive">
+				<table class="table">
+					<tbody>
+						<tr>
+							<td>VIN/SN:</td>
+							<td> {{v.vin}} </td>
+						</tr>
+						<tr>
+							<td>Color:</td>
+							<td> {{v.coleur}} </td>
+						</tr>
+						<tr>
+							<td>Wheel Type:</td>
+							<td> {{v.typeRoue}} </td>
+						</tr>
+						<tr>
+							<td>Kilometers:</td>
+							<td> {{v.kilometres}} </td>
+						</tr>
+						<tr>
+							<td>Year:</td>
+							<td> {{v.annee}} </td>
+						</tr>
+						<tr>
+							<td>Type:</td>
+							<td> {{v.type}} </td>
+						</tr>
+						<tr>
+							<td>Nb Places:</td>
+							<td> {{v.nbPlace}} </td>
+						</tr>
+						<tr>
+							<td>Ownership:</td>
+							<td> {{v.ownership}} </td>
+						</tr>
+						<tr>
+							<td>registration state:</td>
+							<td> {{v.etatEnreg}} </td>
+						</tr>
+						<tr>
+							<td>Price:</td>
+							<td> {{v.prix}} </td>
+						</tr>
+						<tr>
+							<td>Description/notes:</td>
+							<td> {{v.description}} </td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="card-body">
+			<div class="col-md-6 m-b-30" id="qrcode">
+				{% for im in img %}
+					{% if im.type == "qrcode" %}
+						<img class="img-fluid" src="{{ asset('vehicules-pictures')}}/{{im.image}}" alt="{{im.image}}" style="width:100%;">
+					{% endif %}
+				{% endfor %}
+			</div>
+			<div class="col-md-12">
+				<div class="text-right">
+					<button id="print" class="btn btn-default btn-outline" type="button"> <span><i class="fa fa-print"></i> Print</span> </button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(function() {
+        $("#print").click(function() {
+        	$("#images").attr("class","d-none");
+        	$("#qrcode").attr("class","d-none");
+            var mode = 'iframe'; //popup
+            var close = mode == "popup";
+            var options = {
+                mode: mode,
+                popClose: close
+            };
+            $("div.printableArea").printArea(options);
+        });
+    });
+</script>
+{% endblock %}

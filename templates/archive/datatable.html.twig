@@ -1,0 +1,63 @@
+
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<h3 class="card-title text-center mt-1">Liste des demandes de besoin en logistique</h3>
+				<div class="table-responsive">
+					<table id="zero_config" class="table table-striped table-bordered">
+						<thead>
+							<tr>
+								<th><b>options</b></th>
+								<th><b>Statut</b></th>
+								<th><b>Nom Demandeur</b></th>
+								<th><b>Num Demandeur</b></th>
+								<th><b>Date de Besoin</b></th>
+								<th><b>Site de Départ</b></th>
+								<th><b>Site de Destination<b></b></th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for b in bl %}
+							<tr>
+								<td>
+									<div class="btn-group">
+										<button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="ti-settings"></i>
+										</button>
+										<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 35px, 0px);">
+											<a class="dropdown-item" target="_blank" href="{{path ('archive_bl_open', {id: b.id})}}"><i class="ti-eye"></i> Voir</a>
+											<a class="dropdown-item" onclick='var path = "{{path ('archive_bl_validate', {id: b.id})}}";verify(path);' href="javascript:void()"><i class="ti-check"></i> Valider</a>
+										</div>
+									</div>
+								</td>
+								{% if b.etat == "En Attente" %}
+								<td><span class="label label-warning">{{b.etat}}</span></td>
+								{% endif %}
+								{% if b.etat == "Vérifié" %}
+								<td><span class="label label-success">{{b.etat}}</span></td>
+								{% endif %}
+								<td>{{b.nomDemendeur}}</td>
+								<td>{{b.numDemendeur}}</td>
+								<td>{{b.dateB |date("d/m/yy")}}</td>
+								<td>{{b.siteDep}}</td>
+								<td>{{b.siteDes}}</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+						<tfoot>
+							<tr>
+								<th><b>options</b></th>
+								<th><b>Statut</b></th>
+								<th><b>Nom Demandeur</b></th>
+								<th><b>Num Demandeur</b></th>
+								<th><b>Date de Besoin</b></th>
+								<th><b>Site de Départ</b></th>
+								<th><b>Site de Destination</b></th>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">$('#zero_config').DataTable();</script>

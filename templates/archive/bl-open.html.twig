@@ -1,0 +1,132 @@
+{% extends './base.html.twig' %}
+
+{% block title %}Besoin en Logistique{% endblock %}
+
+{% block stylesheets %}
+<style>
+table-bordered, .table-bordered td, .table-bordered th{
+	border :1px solid #6c757d;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb %}
+	<h4 class="page-title">Besoin en Logistique</h4>
+	<div class="d-flex align-items-center">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="{{ path('default_index') }}">Accueil</a></li>
+				<li class="breadcrumb-item" >Archive</li>
+				<li class="breadcrumb-item active" aria-current="page">Besoin en Logistique</li>
+			</ol>
+		</nav>
+	</div>
+{% endblock %}
+
+
+{% block topRight %}
+   
+{% endblock %}
+
+{% block container %}
+	<div class="card card-body printableArea">
+		<div class="table-responsive m-t-20">
+			<table class="table table-bordered ">
+				<tbody>
+					<tr>
+						<td><img src="{{ asset('assets/images/logo-ploygarde-text.png') }}"></td>
+						<td><h3 style="padding:2em; margin-left: 5rem; margin-right: 5rem;"><b>Besoin en Logistique</b></h3></td>
+						<td><h6>ACL-FR-{{bl.dateB |date("y")}}</h6><hr>
+							<h6>Version du : {{bl.dateB |date("d/m/yy")}}<br></h6><hr>
+							<h6>Num.BL : #bl-{{bl.id}}</h6>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<hr>
+		<br>
+		<div class="table-responsive m-t-20">
+			<table class="table table-bordered">
+				<tbody>
+					<tr>
+						<th><h5> &nbsp; <span class="text-muted">Service demandeur :</span> &nbsp;  {{bl.nomDemendeur}}</h5></th>
+						<th><h5> &nbsp; <span class="text-muted">Numéro demandeur :</span> &nbsp;  {{bl.numDemendeur}}</h5></th>
+						<th><h5> &nbsp; <span class="text-muted">Date :</span>  &nbsp; {{bl.dateB |date("d/m/yy")}}</h5></th>
+					</tr>
+					<tr>
+						<th><h5> &nbsp; <span class="text-muted">Site de départ :</span> &nbsp;  {{bl.siteDep}}</h5></th>
+						<th><h5> &nbsp; <span class="text-muted">Site de destination :</span> &nbsp;  {{bl.siteDes}}</h5></th>
+						<th><h5> &nbsp; <span class="text-muted">Nature de devis :</span> &nbsp; TND</h5></th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<br>
+		<div class="table-responsive m-t-20">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th><b>N°.Ordre</b></th>
+						<th><b>Nature de léquipement</b></th>
+						<th><b>NB de personne</b></th>
+						<th><b>Date de départ</b></th>
+						<th><b>Date d'arrivée</b></th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for de in des %}
+					<tr>
+						<th>{{loop.index}}</th>
+						<th>{{de.nature}}</th>
+						<th>{{de.nbPers}}</th>
+						<th>{{de.dateDep |date("d/m/yy")}}</th>
+						<th>{{de.dateArr |date("d/m/yy")}}</th>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<br>
+		<br>
+		<br>
+		<div class="card card-footer">
+			<div class="row">
+				<div class="col">
+					<h6>Signature Responsable</h6>
+				</div>
+				<div class="col">
+					<h6>Signature Direction Générale</h6>
+				</div>
+				<div class="col">
+					<h6>Signature Demandeur</h6>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<div class="text-right">
+			<button id="print" class="btn btn-default btn-outline" type="button"> <span><i class="fa fa-print"></i> Print</span> </button>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+    $(function() {
+        $("#print").click(function() {
+            var mode = 'iframe'; //popup
+            var close = mode == "popup";
+            var options = {
+                mode: mode,
+                popClose: close
+            };
+            $("div.printableArea").printArea(options);
+        });
+    });
+</script>
+<script>
+
+</script>
+{% endblock %}

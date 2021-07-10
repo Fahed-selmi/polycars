@@ -1,0 +1,161 @@
+{% extends './base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+{% block stylesheets %}
+
+{% endblock %}
+{% block wrapper %}
+<div class="card gredient-info-bg m-t-0 m-b-0">
+    <div class="card-body">
+        {% if is_granted('ROLE_SUPER_ADMIN') == false %}
+        <h4 class="card-title text-white">Bonjour {{app.user.nom}} {{app.user.prenom}}</h4>
+        {% else %}
+        <h4 class="card-title text-white">Espace maintenance</h4>
+        {% endif %}
+        <h5 class="card-subtitle text-white op-5">Tableau de Bord</h5>
+        <div class="row m-t-30 m-b-20">
+            
+            <div class="col-sm-12 col-lg">
+                <div class="row">
+                    <div class="col-sm-12 col-md-3">
+                        <div class="info d-flex align-items-center">
+                            <div class="m-r-10">
+                                <i class="far fa-calendar-check text-white display-7 op-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-white m-b-0">68 Affectations</h3>
+                                <a href="" class="text-white op-5">Voire plus</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3">
+                        <div class="info d-flex align-items-center">
+                            <div class="m-r-10">
+                                <i class="fas fa-exclamation-triangle text-white display-7 op-5"></i>
+                            </div>
+                            <div>
+                                
+                                <h3 class="text-white m-b-0">
+                                    {{vCount}}
+                                    En Panne
+                                </h3>
+                                
+                                <a href="{{ path('vehicule_index') }}" class="text-white op-5">Voire plus</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3">
+                        <div class="info d-flex align-items-center">
+                            <div class="m-r-10">
+                                <i class="fas fa-bell text-white display-7 op-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-white m-b-0">
+                                            {{techCount}}
+                                    Fiche Téchnique
+                                </h3>
+                                <a href="{{ path('suivi_index') }}" class="text-white op-5">Voire plus</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3">
+                        <div class="info d-flex align-items-center">
+                            <div class="m-r-10">
+                                <i class="fas fa-wrench text-white display-7 op-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-white m-b-0">5 Services</h3>
+                                <a href="{{ path('services_index') }}" class="text-white op-5">Voire plus</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block container %}
+
+<div class="row">
+    <div class="col-sm-12 col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <h3 class="font-bold m-b-0">Fiche téchnique (à venir)</h3>
+                        <a href="" style="color:black;" class="op-5">Voire plus</a>
+                    </div>
+                    <div class="ml-auto">
+                        <i class="fas fa-calendar-alt fa-3x text-info"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {#{% set leasing = v.dateLeasing|date("d-m-yy") %}
+    {% set diffL = date(leasing).diff(date("now")) %}
+    {% set leftL = diffL.days %}
+
+    {% set visite = v.dateExpvisite|date("d-m-yy") %}
+    {% set diffV = date(visite).diff(date("now")) %}
+    {% set leftV = diffV.days %}#}
+    <!-- column -->
+    <div class="col-sm-12 col-lg-6">
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h5 class="font-bold m-b-0">Services</h5>
+                                <a href="" style="color:black;" class="op-5">Voire plus</a>
+                            </div>
+                            <div class="ml-auto">
+                                <i class=" fas fa-wrench fa-2x text-info"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h5 class="font-bold m-b-0">Afféctations</h5>
+                                <a href="" style="color:black;" class="op-5">Voire plus</a>
+                            </div>
+                            <div class="ml-auto">
+                                <i class="fas fa-flag-checkered fa-2x text-info"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="card order-widget">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h5 class="font-bold m-b-0">Fiche téchnique</h5>
+                                <a href="" style="color:black;" class="op-5">Voire plus</a>
+                            </div>
+                            <div class="ml-auto">
+                                <i class="fas fa-calendar-alt fa-2x text-info"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}

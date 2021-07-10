@@ -1,0 +1,273 @@
+{% extends './base.html.twig' %}
+
+{% block title %}Paramètre{% endblock %}
+
+{% block stylesheets %}
+<style type="text/css">
+    input{
+        border:none;
+        background-color: transparent;
+        width: 2em;
+    }
+    .hide{
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block breadcrumb %}
+    <h4 class="page-title">Paramètre</h4>
+    <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('default_index') }}">Accueil</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Paramètre</li>
+            </ol>
+        </nav>
+    </div>
+{% endblock %}
+{% block container %}
+
+
+<div class="row">
+    <div class="col-lg-3 col-xl-2 col-md-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="nav flex-column nav-pills mt-30 list-group" id="settings-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active list-group-item" id="v-pills-home-tab" data-toggle="pill" href="#settings" role="tab" aria-selected="true">  
+                        <i class="ti-settings m-r-10"></i> Paramètre Général
+                    </a>
+                    <a class="nav-link list-group-item" id="maintenance-tab" data-toggle="pill" href="#maintenance" role="tab" aria-selected="false">
+                        <i class="fas fa-wrench m-r-10"></i> Maintenance Préventive
+                    </a>
+                    <a class="nav-link list-group-item" id="autre-tab" data-toggle="pill" href="#autre" role="tab" aria-selected="false">
+                        <i class="ti-menu m-r-10"></i> Autre
+                    </a>
+                    <h4 class="card-title m-t-30">Import/Export</h4>
+                    <a class="nav-link list-group-item" id="vehicule-tab" data-toggle="pill" href="#vehicule" role="tab" aria-selected="true">  
+                        <i class="ti-car m-r-10"></i> Vehicule
+                    </a>
+                    <a class="nav-link list-group-item" id="clients-tab" data-toggle="pill" href="#clients" role="tab" aria-selected="true">
+                        <i class="ti-user m-r-10"></i> Clients
+                    </a>
+                    <a class="nav-link list-group-item" id="agents-tab" data-toggle="pill" href="#agents" role="tab" aria-selected="true">
+                        <i class="ti-user m-r-10"></i> Agents
+                    </a>
+                    <a class="nav-link list-group-item" id="tech-tab" data-toggle="pill" href="#tech" role="tab" aria-selected="true">
+                        <i class=" ti-flag-alt m-r-10"></i> Fiche Téchnique
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9 col-xl-10 col-md-10">
+        <div class="card">
+            <div class="card-body">
+                <div class="tab-content" id="tabs">
+                    <div class="tab-pane fade show active" id="settings" role="tabpanel" aria-labelledby="settings-tab">.
+                        1
+                    </div>
+
+                    <div class="tab-pane fade" id="maintenance" role="tabpanel" aria-labelledby="maintenance-tab">.
+
+                        <div class="d-flex no-block align-items-center m-b-30">
+                            <h4 class="card-title">Maintenance Préventive</h4>
+                            <div class="ml-auto">
+                                <div class="btn-group">
+                                    
+                                </div>
+                            </div>
+                        </div>  
+                        <form method="POST" action="{{path ('preventive-edit')}}">
+                            <table class="table table-bordered" id="table-setting">
+                                <thead>
+                                    <tr>
+                                        <th><a href="javascript:void()" id="addRow"><i class="fas fa-plus-circle"></i></a></th>
+                                        <th><b>Km</b></th>
+                                        <th><b>Filter huile</b></th>
+                                        <th><b>Filter gasoil</b></th>
+                                        <th><b>Filter air </b></th>
+                                        <th><b>Huile</b></th>
+                                        <th><b>Roue</b></th>
+                                        <th><b>Frein</b></th>
+                                        <th><b>Chaine</b></th>
+                                        <th><b>Visite</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for m in maintenance %}
+                                    <tr >
+                                        <td><input type="number" name="id[]" value="{{m.id}}" class="hide" readonly>{{loop.index}}</td>
+                                        <td><input type="text" name="km[]" value="{{m.km}}" style="width:auto;" minlength="4"></td>
+
+                                        {% if m.filtreHuile == 1 %}
+                                        <td class="bg-success"><input type="number" value="1" name="fh[]" readonly class="hide"></td>
+                                        {% else %}
+                                        <td class="bg-danger"><input type="number" value="0" name="fh[]" readonly class="hide"></td>
+                                        {% endif %}
+
+                                        {% if m.filtreGasoil == 1 %}
+                                        <td class="bg-success"><input type="number" value="1" name="fg[]" readonly class="hide"></td>
+                                        {% else %}
+                                        <td class="bg-danger"><input type="number" value="0" name="fg[]" readonly class="hide"></td>
+                                        {% endif %}
+                                        
+                                        {% if m.filtreAir == 1 %}
+                                        <td class="bg-success"><input type="number" value="1" name="fa[]" readonly class="hide"></td>
+                                        {% else %}
+                                        <td class="bg-danger"><input type="number" value="0" name="fa[]" readonly class="hide"></td>
+                                        {% endif %}
+
+                                        {% if m.huile == 1 %}
+                                        <td class="bg-success"><input type="number" value="1" name="h[]" readonly class="hide"></td>
+                                        {% else %}
+                                        <td class="bg-danger"><input type="number" value="0" name="h[]" readonly class="hide"></td>
+                                        {% endif %}                        
+
+                                        {% if m.roue == 1 %}
+                                        <td class="bg-success"><input type="number" value="1" name="r[]" readonly class="hide"></td>
+                                        {% else %}
+                                        <td class="bg-danger"><input type="number" value="0" name="r[]" readonly class="hide"></td>
+                                        {% endif %} 
+                                    
+                                        {% if m.frein == 1 %}
+                                        <td class="bg-success"><input type="number" value="1" name="f[]" readonly class="hide"></td>
+                                        {% else %}
+                                        <td class="bg-danger"><input type="number" value="0" name="f[]" readonly class="hide"></td>
+                                        {% endif %}
+                                        
+                                        {% if m.chaine == 1 %}
+                                        <td class="bg-success"><input type="number" value="1" name="c[]" readonly class="hide"></td>
+                                        {% else %}
+                                        <td class="bg-danger"><input type="number" value="0" name="c[]" readonly class="hide"></td>
+                                        {% endif %}
+                                        
+                                        {% if m.visite == 1 %}
+                                        <td class="bg-success"><input type="number" value="1" name="v[]" readonly class="hide"></td>
+                                        {% else %}
+                                        <td class="bg-danger"><input type="number" value="0" name="v[]" readonly class="hide"></td>
+                                        {% endif %}
+                                    
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <div id="test"></div>
+                            <button type="submit" id="submit" class="btn btn-warning">
+                                Modifier
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane fade" id="autre" role="tabpanel" aria-labelledby="autre-tab">.
+                        3
+                    </div>
+
+                    <div class="tab-pane fade" id="vehicule" role="tabpanel" aria-labelledby="vehicule-tab">.
+                        4
+                    </div>
+
+                    <div class="tab-pane fade" id="clients" role="tabpanel" aria-labelledby="clients-tab">.
+                        5
+                    </div>
+
+                    <div class="tab-pane fade" id="agents" role="tabpanel" aria-labelledby="agents-tab">.
+                        6
+                    </div>
+
+                    <div class="tab-pane fade" id="tech" role="tabpanel" aria-labelledby="tech-tab">.
+                        7
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+
+    var tbl = $('#table-setting').DataTable({
+        "paging": false,
+        "info": false,
+        "filter": false,
+        "ordering": false,
+        "createdRow" : function(row,data,rowIndex){
+           $(row).on('click',function(){
+                $('#table-setting td').unbind();
+                $('#table-setting td').on('click' ,function(){
+                    var td = tbl.cell($(this).closest('td')).nodes().to$().find('input');
+                    if (td.val() == 1) {
+                        $(this).removeClass('bg-success');
+                        $(this).toggleClass('bg-danger');
+                        td.val(0);
+                    }else if(td.val() == 0){
+                        $(this).removeClass('bg-danger');
+                        $(this).toggleClass('bg-success');
+                        td.val(1);
+                    }
+                });
+            });
+        }
+    });
+
+    $('#submit').click(function(){
+        
+        //var test = document.getElementById('test');
+        //var data = tbl.$('input').serialize();
+        //alert(data);     
+        /*$.ajax({
+              type: "POST",
+              enctype: 'multipart/form-data',
+              url: "/setting/update-preventive",
+              data: {
+                km: 'test'
+              },
+              processData: false,
+              contentType: false,
+              cache: false,
+              success: function () {
+                  Notiflix.Notify.Success('Véhicule modifié avec succée');
+                  location.href="/vehicule";
+              },
+              error: function () {
+                  $("#btnSubmit").prop("disabled", false);
+                  Notiflix.Notify.Error('Veuillez ressayez plus tard');
+              }
+        });*/
+    });
+    
+
+    $('#addRow').on('click', function() {
+        tbl.row.add([
+            "",
+            "<input type='number' name='km1[]' value='1000' style='width:auto;' >",
+            "<input type='number' name='fh1[]' value='0' class='hide' readonly>",
+            "<input type='number' name='fg1[]' value='0' class='hide' readonly>",
+            "<input type='number' name='fa1[]' value='0' class='hide' readonly>",
+            "<input type='number' name='h1[]' value='0' class='hide' readonly>",
+            "<input type='number' name='r1[]' value='0' class='hide' readonly>",
+            "<input type='number' name='f1[]' value='0' class='hide' readonly>",
+            "<input type='number' name='c1[]' value='0' class='hide' readonly>",
+            "<input type='number' name='v1[]' value='0' class='hide' readonly>"
+        ]).draw(false);
+        
+    });
+
+    /*$('#table-setting td').on('click',function(){
+        var td = tbl.cell($(this).closest('td')).nodes().to$().find('input');
+        //alert(td.val());
+        if (td.val() == 1) {
+            $(this).removeClass('bg-success');
+            $(this).toggleClass('bg-danger');
+            td.val(0);
+        }else if(td.val() == 0){
+            $(this).removeClass('bg-danger');
+            $(this).toggleClass('bg-success');
+            td.val(1);
+        }
+    });*/
+
+</script>
+{% endblock %}

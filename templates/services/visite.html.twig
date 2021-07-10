@@ -1,0 +1,330 @@
+{% extends './base.html.twig' %}
+
+{% block title %}Services{% endblock %}
+{% block stylesheets %}
+<style type="text/css">
+
+::-webkit-datetime-edit{
+	padding: 1em;
+}
+::-webkit-datetime-edit-text{
+	padding: 1em;
+	color: silver;
+}
+</style>
+{% endblock %}
+{% block breadcrumb %}
+	<h4 class="page-title">Services</h4>
+	<div class="d-flex align-items-center">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="{{ path('default_index') }}">Accueil</a></li>
+				<li class="breadcrumb-item" aria-current="page">Services</li>
+				<li class="breadcrumb-item active" aria-current="page">Fiche téchnique</li>
+			</ol>
+		</nav>
+	</div>
+{% endblock %}
+
+{% block container %}
+<script type="text/javascript">var path;</script>
+<div class="row" id="row">
+	<div class="col-sm-12 col-lg-12">
+		<div class="card">
+			<div class="card-body hover">
+				<h3 class="card-title text-center mt-1">Fiche suivi asurance et visite téchnique</h3>
+                <div class="table-responsive m-t-5">
+                    <table id="table-tech" class="table table-hover" style="width:100%">
+						<thead>
+							<tr>
+								<th width="1em"><b>#</b></th>
+								<th style="display:none;"><b>ID</b></th>
+								<th style="display:none;"><b>ID</b></th>
+								<th><b>Nom Véhicule</b></th>
+								<th><b>Matricule</b></th>
+								<th><b>Date Leasing</b></th>
+								<th><b>Jours restants</b></th>
+								<th><b>Date Exp Visite</b></th>
+								<th><b>Jours restants</b></th>
+								<th><b>Date Exp Assurance</b></th>
+								<th><b>Jours restants</b></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for t in tech %}
+								{% set leasing = t.dateLeasing|date("d-m-yy") %}
+								{% set diffL = date(leasing).diff(date("now")) %}
+								{% set leftL = diffL.days %}
+
+								{% set visite = t.dateExpvisite|date("d-m-yy") %}
+								{% set diffV = date(visite).diff(date("now")) %}
+								{% set leftV = diffV.days %}
+
+								{% set assurance = t.dateExpAssurance|date("d-m-yy") %}
+								{% set diffA = date(assurance).diff(date("now")) %}
+								{% set leftA = diffA.days %}
+							<tr id="row-{{t.id}}">
+								<td  width="1em">
+	                                <button href="javascript:void()" class="btn btn-primary" id="btn-edit" data-toggle="modal" data-target="#modal-modifier" onclick='path = "{{path ('suivi_edit', {id: t.id})}}";'>Modifier</button>
+								</td>
+								<td style="display:none;">{{t.vehicule.id}}</td>
+								<td style="display:none;">{{t.id}}</td>
+								<td style="width:7rem;">{{t.vehicule.vNom}}</td>
+								<td style="width:7rem;">{{t.vehicule.matricule}}</td>
+
+								<td id="leasing-{{t.id}}"
+								{% if leftL < 7 %}
+								 class="table-danger" 
+								{% endif %}
+								{% if leftL <= 30 %}
+								 class="table-orange" 
+								{% endif %}
+								{% if leftL > 30 %}
+								 class="table-success" 
+								{% endif %}
+								>
+									{{t.dateLeasing|date("Y-m-d")}}
+								</td>
+								<td></td>
+
+								<td  id="visite-{{t.id}}"
+								{% if leftV < 7 %}
+								 class="table-danger" 
+								{% endif %}
+								{% if leftV <= 30 %}
+								 class="table-orange" 
+								{% endif %}
+								{% if leftV > 30 %}
+								 class="table-success" 
+								{% endif %}
+								>
+									{{t.dateExpVisite|date("Y-m-d")}}
+								</td>
+								<td></td>
+
+								<td  id="assurance-{{t.id}}"
+								{% if leftA < 7 %}
+								 class="table-danger" 
+								{% endif %}
+								{% if leftA <= 30 %}
+								 class="table-orange" 
+								{% endif %}
+								{% if leftA > 30 %}
+								 class="table-success" 
+								{% endif %}
+								>
+									{{t.dateExpAssurance|date("Y-m-d")}}
+								</td>
+								<td></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+						<tfoot>
+							<tr>
+								<th width="1em"><b>#</b></th>
+								<th style="display:none;"><b>ID</b></th>
+								<th style="display:none;"><b>ID</b></th>
+								<th><b>Nom Véhicule</b></th>
+								<th><b>Matricule</b></th>
+								<th><b>Date Leasing</b></th>
+								<th><b>Jours restants</b></th>
+								<th><b>Date Exp Visite</b></th>
+								<th><b>Jours restants</b></th>
+								<th><b>Date Exp Assurance</b></th>
+								<th><b>Jours restants</b></th>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="modal-modifier" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+	    <div class="modal-content">
+	    	<form class="mt-4" id="tech-form" method="POST">
+		       	<div class="modal-body">
+		        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		            <div class="form-group">
+		            	<input type="text" class="form-control" id="id" style="display:none;">
+		            	<input type="text" class="form-control" id="id1" style="display:none;">
+						<label for="vehicule">Véhicule</label>
+		                <input type="text" class="form-control" id="vehicule">
+		            </div>
+		            <div class="form-group">
+		                <label for="matricule">Matricule</label>
+		                <input type="text" class="form-control" id="matricule">
+		            </div>
+		            <div class="form-group">
+		                <label for="leasing">Date Leasing</label>
+		                <input type="date" name="dateLeasing" class="form-control" id="dateLeasing" required="">
+		            </div>
+		            <div class="form-group">
+		                <label for="visite">Date Visite</label>
+		                <input type="date" name="dateExpVisite" class="form-control" id="dateExpVisite" required="">
+		            </div>
+		            <div class="form-group">
+		                <label for="assurance">Date Assurance</label>
+		                <input type="date" name="dateExpAssurance" class="form-control" id="dateExpAssurance" required="">
+		            </div>
+		        </div>
+		        <div class="modal-footer">
+		            <button type="submit" id="modifier-tech" class="btn btn-primary">Modifier</button>
+		        </div>
+	        </form>
+	    </div>
+	</div>
+</div>
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+	var table2 = $('#table-tech').DataTable();
+	var length = table2.rows().count();
+	moment.locale('fr');
+	
+	function checkDates(){
+		for (var i = 0 ; i < length; i++) {
+			var dateLeasing = table2.row(i).data()[5];
+			var dateExpVisite = table2.row(i).data()[7];
+			var dateExpAssurance = table2.row(i).data()[9];
+			var endL = moment(dateLeasing);
+			var dateL = endL.fromNow();
+			var endV = moment(dateExpVisite);
+			var dateV = endV.fromNow();
+			var endA = moment(dateExpAssurance);
+			var dateA = endA.fromNow();
+			table2.cell({row:i,column:6}).data(dateL);			
+			table2.cell({row:i,column:8}).data(dateV);			
+			table2.cell({row:i,column:10}).data(dateA);	
+		}
+	}
+	checkDates();
+	$('#table-tech tbody').on('click','#btn-edit',function(){
+		//GET THE SELECTED ROW;
+		var row = table2.row($(this).closest('tr'));
+		var id = document.getElementById("id");
+		var id1 = document.getElementById("id1");
+
+		//GET THE FORM INPUTS
+		var matricule = document.getElementById("matricule");
+		var vehicule = document.getElementById("vehicule");
+		var leasing = document.getElementById("dateLeasing");
+		var visite = document.getElementById("dateExpVisite");
+		var assurance = document.getElementById("dateExpAssurance");
+
+		//BUTTONS CONTROL
+		matricule.disabled=true;
+		vehicule.disabled=true;
+
+		//INSERT TABLE VALUES TO FORM
+		id1.value = row.data()[1];
+		id.value = row.data()[2];
+		vehicule.value = row.data()[3];
+		matricule.value = row.data()[4];
+		leasing.value = row.data()[5];
+		visite.value = row.data()[7];
+		assurance.value = row.data()[9];
+	});
+
+	$(document).ready(function () {
+		 $("#modifier-tech").click(function () {
+		  	$("input,select,textarea").not("[type=submit]").jqBootstrapValidation({
+		  		submitSuccess: function($form, event){
+		  			event.preventDefault();
+		  			event.stopPropagation();
+		  			$("#modifier-tech").unbind();
+		  			// GET DATA FROM FORM
+		  			var dateLeasing = $('#dateLeasing').val();
+					var dateExpVisite = $('#dateExpVisite').val();
+					var dateExpAssurance = $('#dateExpAssurance').val();
+					var vehicule = $('#id1').val();
+					var tech = $("#id").val();
+
+					//GET THE SELECTED ROW
+				    var row = table2.row("#row-"+tech);
+
+				    //GET ROW INDEX
+				    var rowIndex = row.index();
+
+					//INITIALIZE DATES
+					var week = moment().add(7, 'days').format("YYYY-MM-DD");
+					var month = moment().add(30, 'days').format("YYYY-MM-DD");
+					var endL = moment(dateLeasing);
+					var dateL = endL.fromNow();
+					var endV = moment(dateExpVisite);
+					var dateV = endV.fromNow();
+					var endA = moment(dateExpAssurance);
+					var dateA = endA.fromNow();
+					//alert(res);
+
+					//UPDATE TABLE
+					table2.cell({row:rowIndex,column:5}).data(dateLeasing);
+					table2.cell({row:rowIndex,column:6}).data(dateL);
+					table2.cell({row:rowIndex,column:7}).data(dateExpVisite);
+					table2.cell({row:rowIndex,column:8}).data(dateV);
+					table2.cell({row:rowIndex,column:9}).data(dateExpAssurance);
+					table2.cell({row:rowIndex,column:10}).data(dateA);
+
+					//ADD CLASSES BASED ON DATE COMPARISON
+				    if (moment(dateLeasing).isBefore(week)) {
+				    	$("#leasing-"+tech).removeAttr("class");
+				    	$("#leasing-"+tech).attr("class","table-danger");
+				    }else if (moment(dateLeasing).isBefore(month)){
+				    	$("#leasing-"+tech).removeAttr("class");
+				    	$("#leasing-"+tech).attr("class","table-orange");
+				    } else if (moment(dateLeasing).isAfter(month)) {
+				    	$("#leasing-"+tech).removeAttr("class");
+				    	$("#leasing-"+tech).attr("class","table-success");
+				    }
+
+				    if (moment(dateExpVisite).isBefore(week)) {
+				    	$("#visite-"+tech).removeAttr("class");
+				    	$("#visite-"+tech).attr("class","table-danger");
+				    }else if (moment(dateExpVisite).isBefore(month)){
+				    	$("#visite-"+tech).removeAttr("class");
+				    	$("#visite-"+tech).attr("class","table-orange");
+				    } else if (moment(dateExpVisite).isAfter(month)) {
+				    	$("#visite-"+tech).removeAttr("class");
+				    	$("#visite-"+tech).attr("class","table-success");
+				    }
+
+				    if (moment(dateExpAssurance).isBefore(week)) {
+				    	$("#assurance-"+tech).removeAttr("class");
+				    	$("#assurance-"+tech).attr("class","table-danger");
+				    }else if (moment(dateExpAssurance).isBefore(month)){
+				    	$("#assurance-"+tech).removeAttr("class");
+				    	$("#assurance-"+tech).attr("class","table-orange");
+				    } else if (moment(dateExpAssurance).isAfter(month)) {
+				    	$("#assurance-"+tech).removeAttr("class");
+				    	$("#assurance-"+tech).attr("class","table-success");
+				    }
+				    //DISABLE SUBMIT BUTTON
+				   $("#modifier-tech").prop("disabled", true);
+				    $("#modal-modifier").modal("hide");
+		  			$.ajax({
+			          type: "POST",
+			          url: path,
+			          data: {
+						vehicule: vehicule,				
+						dateLeasing: $('#dateLeasing').val(),				
+						dateExpVisite: $('#dateExpVisite').val(),				
+						dateExpAssurance: $('#dateExpAssurance').val()				
+						},
+			          cache: false,
+			          timeout: 800000,
+			          success: function (data) {
+			              $("#modifier-tech").prop("disabled", false);
+			              //Notiflix.Notify.Success('Modifié avec succée');
+			          },
+			          error: function (e) {
+			              $("#modifier-tech").prop("disabled", false);
+			              Notiflix.Notify.Error('Veuillez ressayez plus tard');
+			          }
+			      });
+		  		}
+		  	});
+		  });
+	});
+</script>
+{% endblock %}

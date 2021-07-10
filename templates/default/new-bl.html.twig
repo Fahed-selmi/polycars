@@ -1,0 +1,909 @@
+{% extends './base.html.twig' %}
+
+{% block title %}Besoin en Logistique{% endblock %}
+
+{% block stylesheets %}
+<style type="text/css">
+.feed{
+	border:solid #c3c3c3 1px;
+	padding: 2em;
+	width: 95%;
+}
+::-webkit-datetime-edit{
+	padding: 1em;
+}
+::-webkit-datetime-edit-text{
+	padding: 1em;
+	color: silver;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb %}
+	<h4 class="page-title">Besoin en Logistique</h4>
+	<div class="d-flex align-items-center">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="{{ path('default_index') }}">Accueil</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Besoin en Logistique</li>
+			</ol>
+		</nav>
+	</div>
+{% endblock %}
+
+{% block topRight %}
+   
+{% endblock %}
+
+{% block container %}
+<div class="container">
+	<form action="{{ path('default_new_bl') }}" method="POST" novalidate>
+		<div class="card">
+			<div class="card-body">
+				<h3 class="card-title text-center mt-1">Besoin Logistique</h3>
+			</div>
+			<hr>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+							<label>Nom Demandeur :</label>
+							<select id="nom_demandeur" name="nom_demandeur" class="client select2 form-control custom-select" onchange="selectionchange();" style="width: 100%; height:36px;" required>
+                            	<option>-Select-</option>
+                            	{% for client in clients %}
+							    <option value="{{client.nom}}" >{{client.nom}}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-6">
+						<div class="form-group">
+							<label>Num Demandeur :</label>
+							<input type="tel" class="form-control" id="num_demandeur" name="num_demandeur" required>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Date de Besoin :</label>
+							<div class="input-group">
+								<input type="date" id="date_besoin" class="form-control mydatepicker" placeholder="dd/mm/yyyy"  name="date_besoin" required>
+								<div class="input-group-append">
+									<span class="input-group-text"><i class="icon-calender"></i></span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Site de Départ :</label>
+							<select name="site_dep" id="site_dep" class="select2 form-control custom-select" style="width: 100%; height:36px;" required>
+								<option>-Select-</option>
+								<optgroup label="Tunis">
+									<option value="Tunis">Tunis</option>
+									<option>Le Bardo</option>
+									<option>Le Kram</option>
+									<option>La Goulette</option>
+									<option>Carthage</option>
+									<option>Sidi Bou</option>
+									<option>La Marsa</option>
+									<option>Sidi Hassine</option>
+								</optgroup>
+								<optgroup label="Ariana">
+									<option>Ariana</option>
+									<option>La Soukra</option>
+									<option>Raoued</option>
+									<option>Kalâat el-Andalous</option>
+									<option>Sidi Thabet</option>
+									<option>Ettadhamen-Mnihla</option>
+								</optgroup>
+								<optgroup label="Ben Arous">
+									<option>Ben Arous</option>
+									<option>El Mourouj</option>
+									<option>Hammam Lif</option>
+									<option>Hammam Chott</option>
+									<option>Bou Mhel el-Bassatine</option>
+									<option>Ezzahra</option>
+									<option>Radès</option>
+									<option>Mégrine</option>
+									<option>Mohamedia-Fouchana</option>
+									<option>Mornag8</option>
+									<option>Khalidia
+									</optgroup>
+								<optgroup label="Manouba"> 
+									<option>Manouba</option>
+									<option>Den Den</option>
+									<option>Douar Hicher</option>
+									<option>Oued Ellil</option>
+									<option>Mornaguia</option>
+									<option>Borj El Amri</option>
+									<option>Djedeida</option>
+									<option>Tebourba</option>
+									<option>El Battan</option>
+								</optgroup>
+								<optgroup label="Nabeul"> 
+									<option>Nabeul </option>
+									<option>Dar Chaabane</option>
+									<option>Béni Khiar</option>
+									<option>El Maâmoura</option>
+									<option>Somâa</option>
+									<option>Korba</option>
+									<option>Tazerka</option>
+									<option>Menzel Temime</option>
+									<option>Menzel Horr</option>
+									<option>El Mida</option>
+									<option>Kelibia</option>
+									<option>Azmour</option>
+									<option>Hammam Ghezèze</option>
+									<option>Dar Allouch</option>
+									<option>El Haouaria</option>
+									<option>Takelsa</option>
+									<option>Soliman</option>
+									<option>Korbous</option>
+									<option>Menzel Bouzelfa</option>
+									<option>Béni Khalled</option>
+									<option>Zaouiet Djedidi</option>
+									<option>Grombalia</option>
+									<option>Bou Argoub</option>
+									<option>Hammamet</option>
+								</optgroup>
+								<optgroup label="Zaghouan">
+									<option>Zaghouan</option>
+									<option>Zriba</option>
+									<option>Bir Mcherga</option>
+									<option>Djebel Oust</option>
+									<option>El Fahs</option>
+									<option>Nadhour</option>
+								</optgroup>
+								<optgroup label="Bizerte">
+									<option>Bizerte</option>
+									<option>Sejnane</option>
+									<option>Mateur</option>
+									<option>Menzel Bourguiba</option>
+									<option>Tinja</option>
+									<option>Ghar al Milh</option>
+									<option>Aousja</option>
+									<option>Menzel Jemil</option>
+									<option>Menzel Abderrahmane</option>
+									<option>El Alia</option>
+									<option>Ras Jebel</option> 
+									<option>Metline</option>
+									<option>Raf Raf</option>
+								</optgroup>
+								<optgroup label="Béja"> 
+									<option>Béja</option>
+									<option>El Maâgoula</option>
+									<option>Zahret Medien</option>
+									<option>Nefza</option>
+									<option>Téboursouk</option>
+									<option>Testour</option>
+									<option>Goubellat</option>
+									<option>Majaz al Bab</option>
+								</optgroup>
+								<optgroup label="Jendouba">
+									<option>Jendouba</option>
+									<option>Bou Salem</option>
+									<option>Tabarka</option>
+									<option>Aïn Draham</option>
+									<option>Fernana</option>
+									<option>Beni M'Tir</option>
+									<option>Ghardimaou</option>
+									<option>Oued Melliz</option>
+								</optgroup>
+								<optgroup label="Kef">
+									<option>El Kef</option>
+									<option>Nebeur</option>
+									<option>Touiref</option>
+									<option>Sakiet Sidi Youssef</option>
+									<option>Tajerouine</option>
+									<option>Menzel Salem</option>
+									<option>Kalaat es Senam</option>
+									<option>Kalâat Khasba</option>
+									<option>Jérissa</option>
+									<option>El Ksour</option>
+									<option>Dahmani</option> 
+									<option>Sers</option>
+								</optgroup>
+								<optgroup label="Siliana"> 
+									<option>Siliana</option>
+									<option>Bou Arada</option>
+									<option>Gaâfour</option>
+									<option>El Krib</option>
+									<option>Sidi Bou Rouis</option>
+									<option>Maktar</option>
+									<option>Rouhia</option>
+									<option>Kesra</option>
+									<option>Bargou</option>
+									<option>El Aroussa</option>
+								</optgroup>
+								<optgroup label="Sousse">
+									<option>Sousse</option>
+									<option>Ksibet Thrayet</option>
+									<option>Ezzouhour</option>
+									<option>Zaouiet Sousse </option>
+									<option>Hammam Sousse </option>
+									<option>Akouda</option> 
+									<option>Kalâa Kebira </option>
+									<option>Sidi Bou Ali</option> 
+									<option>Hergla</option> 
+									<option>Enfidha</option> 
+									<option>Bouficha</option> 
+									<option>Sidi El Hani </option>
+									<option>M'saken </option>
+									<option>Kalâa Seghira </option>
+									<option>Messaadine</option>
+									<option>Kondar</option>
+								</optgroup>
+								<optgroup label="Monastir">
+									<option>Monastir</option>
+									<option>Khniss </option>
+									<option>Ouerdanin</option>
+									<option>Sahline Moôtmar</option>
+									<option>Sidi Ameur</option>
+									<option>Zéramdine</option>
+									<option>Beni Hassen</option>
+									<option>Ghenada</option>
+									<option>Jemmal</option>
+									<option>Menzel Kamel</option>
+									<option>Zaouiet Kontoch</option>
+									<option>Bembla-Mnara</option>
+									<option>Menzel Ennour</option>
+									<option>El Masdour</option>
+									<option>Moknine</option>
+									<option>Sidi Bennour</option>
+									<option>Menzel Farsi</option>
+									<option>Amiret El Fhoul</option>
+									<option>Amiret Touazra</option>
+									<option>Amiret El Hojjaj</option>
+									<option>Cherahil</option>
+									<option>Bekalta</option>
+									<option>Téboulba</option>
+									<option>Ksar Hellal</option>
+									<option>Ksibet El Mediouni</option>
+									<option>Benen Bodher</option>
+									<option>Touza</option>
+									<option>Sayada</option>
+									<option>Lemta</option>
+									<option>Bouhjar</option>
+									<option>Menzel Hayet</option>
+								</optgroup>
+								<optgroup label="Mahdia">
+									<option>Mahdia</option>
+									<option>Rejiche</option>
+									<option>Bou Merdes</option>
+									<option>Ouled Chamekh</option>
+									<option>Chorbane</option>
+									<option>Hebira</option>
+									<option>Essouassi</option>
+									<option>El Djem</option>
+									<option>Kerker</option>
+									<option>Chebba</option>
+									<option>Melloulèche</option>
+									<option>Sidi Alouane</option>
+									<option>Ksour Essef</option>
+									<option>El Bradâa</option>
+								</optgroup>
+								<optgroup label="Sfax">
+									<option>Sfax</option>
+									<option>Sakiet Ezzit</option>
+									<option>Chihia</option>
+									<option>Sakiet Eddaïer</option>
+									<option>Gremda </option>
+									<option>El Ain </option>
+									<option>Thyna </option>
+									<option>Agareb </option>
+									<option>Jebiniana</option> 
+									<option>El Hencha</option> 
+									<option>Menzel Chaker </option>
+									<option>Ghraïba</option>
+									<option>Bir Ali Ben Khélifa </option>
+									<option>Skhira </option>
+									<option>Mahares</option>
+									<option>Kerkennah </option>
+								</optgroup>
+								<optgroup label="Kairouan">
+									<option>Kairouan</option>
+									<option>Chebika</option>
+									<option>Sbikha</option>
+									<option>Oueslatia</option>
+									<option>Aïn Djeloula</option>
+									<option>Haffouz</option>
+									<option>Alaâ</option>
+									<option>Hajeb El Ayoun</option>
+									<option>Nasrallah </option>
+									<option>Menzel Mehiri</option>
+									<option>Echrarda</option>
+									<option>Bou Hajla</option>
+								</optgroup>
+								<optgroup label="Kasserine">
+									<option>Kasserine</option>
+									<option>Sbeitla</option>
+									<option>Sbiba</option>
+									<option>Jedelienne</option>
+									<option>Thala</option>
+									<option>Haïdra</option>
+									<option>Fériana</option>
+									<option>Thélepte</option>
+									<option>Magel Bel Abbès</option>
+								</optgroup>
+								<optgroup label="Sidi Bouzid">
+									<option>Sidi Bouzid</option>
+									<option>Jilma</option>
+									<option>Cebalet</option>
+									<option>Bir El Hafey</option>
+									<option>Sidi Ali Ben Aoun</option>
+									<option>Menzel Bouzaiane</option>
+									<option>Meknassy</option>
+									<option>Mezzouna</option>
+									<option>Regueb</option>
+									<option>Ouled Haffouz</option>
+								</optgroup>
+								<optgroup label="Gabès">
+									<option>Gabès</option>
+									<option>Chenini Nahal</option>
+									<option>Ghannouch</option>
+									<option>Métouia</option>
+									<option>Oudhref</option>
+									<option>El Hamma</option>
+									<option>Matmata</option>
+									<option>Nouvelle Matmata</option>
+									<option>Mareth</option>
+									<option>Zarat</option>
+								</optgroup>
+								<optgroup label="Mednine">
+									<option>Medenine</option>
+									<option>Beni Khedache</option>
+									<option>Ben Gardane</option>
+									<option>Zarzis</option>
+								</optgroup>
+								<optgroup label="Djerba">
+									<option>Houmt El Souk</option>
+									<option>Midoun</option>
+									<option>Ajim </option>
+								</optgroup>
+								<optgroup label="Tataouine">
+									<option>Tataouine</option>
+									<option>Bir Lahmar</option>
+									<option>Ghomrassen</option>
+									<option>Dehiba</option>
+									<option>Remada</option>
+								</optgroup>
+								<optgroup label="Gafsa">
+									<option>Gafsa</option>
+									<option>El Ksar</option>
+									<option>Moularès</option>
+									<option>Redeyef</option>
+									<option>Métlaoui</option>
+									<option>Mdhila</option>
+									<option>El Guettar</option>
+									<option>Sened</option>
+								</optgroup>
+								<optgroup label="Tozeur">
+									<option>Tozeur</option>
+									<option>Degache</option>
+									<option>Hamet Jerid</option>
+									<option>Nafta</option>
+									<option>Tamerza</option>
+								</optgroup>
+								<optgroup label="Kebili">
+									<option>Kebili</option>
+									<option>Djemna</option>
+									<option>Douz</option>
+									<option>El Golâa</option>
+									<option>Souk Lahad</option>
+								</optgroup>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Site Destination :</label>
+							<select name="site_des" id="site_des" class="select2 form-control custom-select" style="width: 100%; height:36px;" required>
+								<option>-Select-</option>
+								<optgroup label="Tunis">
+									<option value="Tunis">Tunis</option>
+									<option>Le Bardo</option>
+									<option>Le Kram</option>
+									<option>La Goulette</option>
+									<option>Carthage</option>
+									<option>Sidi Bou</option>
+									<option>La Marsa</option>
+									<option>Sidi Hassine</option>
+								</optgroup>
+								<optgroup label="Ariana">
+									<option>Ariana</option>
+									<option>La Soukra</option>
+									<option>Raoued</option>
+									<option>Kalâat el-Andalous</option>
+									<option>Sidi Thabet</option>
+									<option>Ettadhamen-Mnihla</option>
+								</optgroup>
+								<optgroup label="Ben Arous">
+									<option>Ben Arous</option>
+									<option>El Mourouj</option>
+									<option>Hammam Lif</option>
+									<option>Hammam Chott</option>
+									<option>Bou Mhel el-Bassatine</option>
+									<option>Ezzahra</option>
+									<option>Radès</option>
+									<option>Mégrine</option>
+									<option>Mohamedia-Fouchana</option>
+									<option>Mornag8</option>
+									<option>Khalidia
+									</optgroup>
+								<optgroup label="Manouba"> 
+									<option>Manouba</option>
+									<option>Den Den</option>
+									<option>Douar Hicher</option>
+									<option>Oued Ellil</option>
+									<option>Mornaguia</option>
+									<option>Borj El Amri</option>
+									<option>Djedeida</option>
+									<option>Tebourba</option>
+									<option>El Battan</option>
+								</optgroup>
+								<optgroup label="Nabeul"> 
+									<option>Nabeul </option>
+									<option>Dar Chaabane</option>
+									<option>Béni Khiar</option>
+									<option>El Maâmoura</option>
+									<option>Somâa</option>
+									<option>Korba</option>
+									<option>Tazerka</option>
+									<option>Menzel Temime</option>
+									<option>Menzel Horr</option>
+									<option>El Mida</option>
+									<option>Kelibia</option>
+									<option>Azmour</option>
+									<option>Hammam Ghezèze</option>
+									<option>Dar Allouch</option>
+									<option>El Haouaria</option>
+									<option>Takelsa</option>
+									<option>Soliman</option>
+									<option>Korbous</option>
+									<option>Menzel Bouzelfa</option>
+									<option>Béni Khalled</option>
+									<option>Zaouiet Djedidi</option>
+									<option>Grombalia</option>
+									<option>Bou Argoub</option>
+									<option>Hammamet</option>
+								</optgroup>
+								<optgroup label="Zaghouan">
+									<option>Zaghouan</option>
+									<option>Zriba</option>
+									<option>Bir Mcherga</option>
+									<option>Djebel Oust</option>
+									<option>El Fahs</option>
+									<option>Nadhour</option>
+								</optgroup>
+								<optgroup label="Bizerte">
+									<option>Bizerte</option>
+									<option>Sejnane</option>
+									<option>Mateur</option>
+									<option>Menzel Bourguiba</option>
+									<option>Tinja</option>
+									<option>Ghar al Milh</option>
+									<option>Aousja</option>
+									<option>Menzel Jemil</option>
+									<option>Menzel Abderrahmane</option>
+									<option>El Alia</option>
+									<option>Ras Jebel</option> 
+									<option>Metline</option>
+									<option>Raf Raf</option>
+								</optgroup>
+								<optgroup label="Béja"> 
+									<option>Béja</option>
+									<option>El Maâgoula</option>
+									<option>Zahret Medien</option>
+									<option>Nefza</option>
+									<option>Téboursouk</option>
+									<option>Testour</option>
+									<option>Goubellat</option>
+									<option>Majaz al Bab</option>
+								</optgroup>
+								<optgroup label="Jendouba">
+									<option>Jendouba</option>
+									<option>Bou Salem</option>
+									<option>Tabarka</option>
+									<option>Aïn Draham</option>
+									<option>Fernana</option>
+									<option>Beni M'Tir</option>
+									<option>Ghardimaou</option>
+									<option>Oued Melliz</option>
+								</optgroup>
+								<optgroup label="Kef">
+									<option>El Kef</option>
+									<option>Nebeur</option>
+									<option>Touiref</option>
+									<option>Sakiet Sidi Youssef</option>
+									<option>Tajerouine</option>
+									<option>Menzel Salem</option>
+									<option>Kalaat es Senam</option>
+									<option>Kalâat Khasba</option>
+									<option>Jérissa</option>
+									<option>El Ksour</option>
+									<option>Dahmani</option> 
+									<option>Sers</option>
+								</optgroup>
+								<optgroup label="Siliana"> 
+									<option>Siliana</option>
+									<option>Bou Arada</option>
+									<option>Gaâfour</option>
+									<option>El Krib</option>
+									<option>Sidi Bou Rouis</option>
+									<option>Maktar</option>
+									<option>Rouhia</option>
+									<option>Kesra</option>
+									<option>Bargou</option>
+									<option>El Aroussa</option>
+								</optgroup>
+								<optgroup label="Sousse">
+									<option>Sousse</option>
+									<option>Ksibet Thrayet</option>
+									<option>Ezzouhour</option>
+									<option>Zaouiet Sousse </option>
+									<option>Hammam Sousse </option>
+									<option>Akouda</option> 
+									<option>Kalâa Kebira </option>
+									<option>Sidi Bou Ali</option> 
+									<option>Hergla</option> 
+									<option>Enfidha</option> 
+									<option>Bouficha</option> 
+									<option>Sidi El Hani </option>
+									<option>M'saken </option>
+									<option>Kalâa Seghira </option>
+									<option>Messaadine</option>
+									<option>Kondar</option>
+								</optgroup>
+								<optgroup label="Monastir">
+									<option>Monastir</option>
+									<option>Khniss </option>
+									<option>Ouerdanin</option>
+									<option>Sahline Moôtmar</option>
+									<option>Sidi Ameur</option>
+									<option>Zéramdine</option>
+									<option>Beni Hassen</option>
+									<option>Ghenada</option>
+									<option>Jemmal</option>
+									<option>Menzel Kamel</option>
+									<option>Zaouiet Kontoch</option>
+									<option>Bembla-Mnara</option>
+									<option>Menzel Ennour</option>
+									<option>El Masdour</option>
+									<option>Moknine</option>
+									<option>Sidi Bennour</option>
+									<option>Menzel Farsi</option>
+									<option>Amiret El Fhoul</option>
+									<option>Amiret Touazra</option>
+									<option>Amiret El Hojjaj</option>
+									<option>Cherahil</option>
+									<option>Bekalta</option>
+									<option>Téboulba</option>
+									<option>Ksar Hellal</option>
+									<option>Ksibet El Mediouni</option>
+									<option>Benen Bodher</option>
+									<option>Touza</option>
+									<option>Sayada</option>
+									<option>Lemta</option>
+									<option>Bouhjar</option>
+									<option>Menzel Hayet</option>
+								</optgroup>
+								<optgroup label="Mahdia">
+									<option>Mahdia</option>
+									<option>Rejiche</option>
+									<option>Bou Merdes</option>
+									<option>Ouled Chamekh</option>
+									<option>Chorbane</option>
+									<option>Hebira</option>
+									<option>Essouassi</option>
+									<option>El Djem</option>
+									<option>Kerker</option>
+									<option>Chebba</option>
+									<option>Melloulèche</option>
+									<option>Sidi Alouane</option>
+									<option>Ksour Essef</option>
+									<option>El Bradâa</option>
+								</optgroup>
+								<optgroup label="Sfax">
+									<option>Sfax</option>
+									<option>Sakiet Ezzit</option>
+									<option>Chihia</option>
+									<option>Sakiet Eddaïer</option>
+									<option>Gremda </option>
+									<option>El Ain </option>
+									<option>Thyna </option>
+									<option>Agareb </option>
+									<option>Jebiniana</option> 
+									<option>El Hencha</option> 
+									<option>Menzel Chaker </option>
+									<option>Ghraïba</option>
+									<option>Bir Ali Ben Khélifa </option>
+									<option>Skhira </option>
+									<option>Mahares</option>
+									<option>Kerkennah </option>
+								</optgroup>
+								<optgroup label="Kairouan">
+									<option>Kairouan</option>
+									<option>Chebika</option>
+									<option>Sbikha</option>
+									<option>Oueslatia</option>
+									<option>Aïn Djeloula</option>
+									<option>Haffouz</option>
+									<option>Alaâ</option>
+									<option>Hajeb El Ayoun</option>
+									<option>Nasrallah </option>
+									<option>Menzel Mehiri</option>
+									<option>Echrarda</option>
+									<option>Bou Hajla</option>
+								</optgroup>
+								<optgroup label="Kasserine">
+									<option>Kasserine</option>
+									<option>Sbeitla</option>
+									<option>Sbiba</option>
+									<option>Jedelienne</option>
+									<option>Thala</option>
+									<option>Haïdra</option>
+									<option>Fériana</option>
+									<option>Thélepte</option>
+									<option>Magel Bel Abbès</option>
+								</optgroup>
+								<optgroup label="Sidi Bouzid">
+									<option>Sidi Bouzid</option>
+									<option>Jilma</option>
+									<option>Cebalet</option>
+									<option>Bir El Hafey</option>
+									<option>Sidi Ali Ben Aoun</option>
+									<option>Menzel Bouzaiane</option>
+									<option>Meknassy</option>
+									<option>Mezzouna</option>
+									<option>Regueb</option>
+									<option>Ouled Haffouz</option>
+								</optgroup>
+								<optgroup label="Gabès">
+									<option>Gabès</option>
+									<option>Chenini Nahal</option>
+									<option>Ghannouch</option>
+									<option>Métouia</option>
+									<option>Oudhref</option>
+									<option>El Hamma</option>
+									<option>Matmata</option>
+									<option>Nouvelle Matmata</option>
+									<option>Mareth</option>
+									<option>Zarat</option>
+								</optgroup>
+								<optgroup label="Mednine">
+									<option>Medenine</option>
+									<option>Beni Khedache</option>
+									<option>Ben Gardane</option>
+									<option>Zarzis</option>
+								</optgroup>
+								<optgroup label="Djerba">
+									<option>Houmt El Souk</option>
+									<option>Midoun</option>
+									<option>Ajim </option>
+								</optgroup>
+								<optgroup label="Tataouine">
+									<option>Tataouine</option>
+									<option>Bir Lahmar</option>
+									<option>Ghomrassen</option>
+									<option>Dehiba</option>
+									<option>Remada</option>
+								</optgroup>
+								<optgroup label="Gafsa">
+									<option>Gafsa</option>
+									<option>El Ksar</option>
+									<option>Moularès</option>
+									<option>Redeyef</option>
+									<option>Métlaoui</option>
+									<option>Mdhila</option>
+									<option>El Guettar</option>
+									<option>Sened</option>
+								</optgroup>
+								<optgroup label="Tozeur">
+									<option>Tozeur</option>
+									<option>Degache</option>
+									<option>Hamet Jerid</option>
+									<option>Nafta</option>
+									<option>Tamerza</option>
+								</optgroup>
+								<optgroup label="Kebili">
+									<option>Kebili</option>
+									<option>Djemna</option>
+									<option>Douz</option>
+									<option>El Golâa</option>
+									<option>Souk Lahad</option>
+								</optgroup>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<div class="card-body">
+				<div class="row show-grid">
+					<div class="col-md-10">
+						<h4 class="card-title">Désignation</h4>
+					</div>
+					<div class="col-md-2">
+						<button onclick="add_des()" type="button" class="btn btn-outline-primary"><i class="fa fa-plus-circle"></i> Ajouter</button>
+					</div>
+				</div>
+				<br>
+				<div id="newlink">
+					<div class="feed">
+					<br>
+						<div class="row">
+							<div class="col-sm-12 col-md-5">
+								<div class="form-group">
+									<label>Nature de Besoin :</label>
+									<input type="text" autocomplete="off" list="nature" class="form-control custom-select" id="nature" name="nature[]" placeholder="-Select-" required>
+									<datalist id="nature">
+										<option value="Transport Peronnel"></option>
+										<option value="Transport Equipement"></option>
+										<option value="Achat Billet d'avion"></option>
+										<option value="Location Voiture"></option>
+										<option value="Hotel et Restauration"></option>
+									</datalist>
+								</div>
+							</div>
+							<div class="col-sm-12 col-md-5">
+								<div class="form-group">
+									<label>Nombre des Personnes :</label>
+									<input type="number" id="nb_pers" class="form-control" name="nb_pers[]" required>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group">
+								<div class="col-sm-12 col-md-5">
+									<div class="form-group">
+										<label>Date de départ :</label>
+										<div class="input-group">
+											<input type="date" class="form-control start" placeholder="dd/mm/yyyy" id="date_dep" name="date_dep[]" required onchange="dateFun()">
+											<div class="input-group-append">
+												<span class="input-group-text"><i class="icon-calender"></i></span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-5">
+									<div class="form-group">
+										<label>Date de d"arrivée :</label>
+										<div class="input-group">
+											<input type="date" class="form-control end" onkeyup="dateFun1()" placeholder="dd/mm/yyyy" name="date_arr[]" id="date_arr" required>
+											<div class="input-group-append">
+												<span class="input-group-text"><i class="icon-calender"></i></span>
+											</div>
+										</div>
+										<div class="form-control-feedback" id="feedback" style="display:none;"><code>Erreur</code></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>	
+			</div>
+			<hr>
+			<div class="card-body">
+				<div class="action-form">
+					<div class="form-group m-b-0 text-right">
+						<input type="submit" class="btn btn-info waves-effect waves-light" id="form_bl" name="form_bl" value="Ajouter">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<div id="newlinktpl" style="display:none;">
+	<br>
+	<div class="feed parent">
+		<div class="row">
+			<div class="col-md-11"></div>
+			<div class="col-md-1">
+				<a href="javascript:void()" onclick="add_des()"><i class="fa fa-plus-circle"></i></a>
+			</div>
+		</div>
+	<br>
+		<div class="row">
+			<div class="col-sm-12 col-md-5">
+				<div class="form-group">
+					<label>Nature de Besoin :</label>
+					<input type="text" autocomplete="off" list="nature" class="form-control custom-select" name="nature[]" placeholder="-Select-" required>
+					<datalist id="nature">
+						<option value="Transport Peronnel"></option>
+						<option value="Transport Equipement"></option>
+						<option value="Achat Billet d'avion"></option>
+						<option value="Location Voiture"></option>
+						<option value="Hotel et Restauration"></option>
+					</datalist>
+				</div>
+			</div>
+			<div class="col-sm-12 col-md-5">
+				<div class="form-group">
+					<label>Nombre des Personnes :</label>
+					<input type="number" class="form-control" name="nb_pers[]" required>
+				</div>
+			</div>
+		</div>
+		<div class="input-group">
+			<div class="col-sm-12 col-md-5">
+				<div class="form-group">
+					<label>Date de départ :</label>
+					<div class="input-group">
+						<input type="date" class="form-control start" placeholder="dd/mm/yyyy" name="date_dep[]" required onchange="dateFun()">
+						<div class="input-group-append">
+							<span class="input-group-text"><i class="icon-calender"></i></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-12 col-md-5">
+				<div class="form-group">
+					<label>Date de d"arrivée :</label>
+					<div class="input-group">
+						<input type="date" class="form-control end" onkeyup="dateFun1()" placeholder="dd/mm/yyyy" name="date_arr[]" required>
+						<div class="input-group-append">
+							<span class="input-group-text"><i class="icon-calender"></i></span>
+						</div>
+					</div>
+					<div class="form-control-feedback" id="feedback" style="display:none;"><code>Erreur</code></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+$('.client').select2({ tags: true});
+$('.select2').select2();
+
+function add_des()
+{
+	var div1 = document.createElement('div');
+	// Get template data
+	div1.innerHTML = document.getElementById('newlinktpl').innerHTML;
+	// append to our form, so that template data
+	//become part of form
+	document.getElementById('newlink').appendChild(div1);
+}
+
+
+function selectionchange()
+{
+    var e = document.getElementById("nom_demandeur");
+    var str = e.options[e.selectedIndex].value;
+    {% for client in clients %}
+    var nom = "{{client.nom}}";
+    	if (nom==str) {
+    		document.getElementById('num_demandeur').value ={{client.numTel}};
+    	}
+    {% endfor %}
+}
+document.getElementById("feedback").style.display = none;
+
+function dateFun(){
+	var start = document.querySelectorAll(".start");
+	var end = document.querySelectorAll(".end");
+
+	for (var i = 0; i < start.length; i++) {
+		end[i].min=start[i].value;
+	 }
+}
+function dateFun1(){
+	var start = document.querySelectorAll(".start");
+	var end = document.querySelectorAll(".end");
+	var feedback = document.getElementById("feedback");
+	
+	for (var i = 0; i < start.length; i++) {
+		if (end[i].value < start[i].value ) {
+			end[i].value=start[i].value;
+			//feedback.style.display = "block";
+		}
+	}
+}
+</script>
+{% endblock %}

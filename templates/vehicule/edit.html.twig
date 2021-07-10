@@ -1,0 +1,369 @@
+{% extends './base.html.twig' %}
+
+{% block title %}Véhicules{% endblock %}
+
+{% block stylesheets %}
+<style type="text/css">
+.upload{
+	width:200px;
+	height: 200px;
+	margin: 1em;
+	border: solid black 1px;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb %}
+	<h4 class="page-title">Véhicules</h4>
+	<div class="d-flex align-items-center">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="{{ path('default_index') }}">Accueil</a></li>
+				<li class="breadcrumb-item " >Véhicules</li>
+				<li class="breadcrumb-item active" aria-current="page">Modifier le Véhicule</li>
+			</ol>
+		</nav>
+	</div>
+{% endblock %}
+
+{% block container %}
+<div class="container">
+	<div class="card">
+		<div class="card-body">
+			<form method="POST" enctype="multipart/form-data" id="myform" novalidate>
+				<div class="modal-body">
+					<h4 class="card-title">Details</h4>
+					<div class="row">
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group" id="validate">
+								<label class="control-label col-form-label">Nom Véhicule</label>
+								<div class="controls">
+									<input type="text" id="vNom" class="form-control" name="vNom" required value="{{v.vNom}}" onkeyup="checkNomV()">
+									<div class="form-control-feedback">
+										<small><code id="error" style="display:none;">Nom de véhicule déja existe</code></small>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Fabricant</label>
+								<div class="controls">
+									<input list="fab" class="form-control" autocomplete="off" name="fabricant" id="fabricant" placeholder="-Select-" required  value="{{v.maker}}">
+									<datalist id="fab">
+									 	<option value="AMC"></option>
+										<option value="Acura"></option>
+										<option value="Alfa Romeo"></option>
+										<option value="Aston Martin"></option>
+										<option value="Audi"></option>
+										<option value="Autocar"></option>
+										<option value="BCI"></option>
+										<option value="BMW"></option>
+										<option value="Caterpillar"></option>
+										<option value="Chevrolet"></option>
+										<option value="Chrysler"></option>
+										<option value="Crane Carrier"></option>
+										<option value="Daewoo"></option>
+										<option value="FIAT"></option>
+										<option value="Ford"></option>
+										<option value="GMC"></option>
+										<option value="Homesteader"></option>
+										<option value="Honda"></option>
+										<option value="Hyundai"></option>
+										<option value="Isuzu"></option>
+										<option value="Iveco"></option>
+										<option value="Jeep"></option>
+										<option value="Kia"></option>
+										<option value="Land Rover"></option>
+										<option value="Mack"></option>
+										<option value="Marmon"></option>
+										<option value="Maserati"></option>
+										<option value="Maybach"></option>
+										<option value="Mazda"></option>
+										<option value="Mercedes-Benz"></option>
+										<option value="Mitsubishi"></option>
+										<option value="Nissan"></option>
+										<option value="Panoz"></option>
+										<option value="Peterbilt"></option>
+										<option value="Pine Hillymouth"></option>
+										<option value="Pontiac"></option>
+										<option value="Ram"></option>
+										<option value="Renault"></option>
+										<option value="Saturn"></option>
+										<option value="ScaniaScion"></option>
+										<option value="Setra"></option>
+										<option value="Smart"></option>
+										<option value="Stealth Enterprises"></option>
+										<option value="Sterling"></option>
+										<option value="Subaru"></option>
+										<option value="Suzuki"></option>
+										<option value="Temsa"></option>
+										<option value="Terex"></option>
+										<option value="Tesla"></option>
+										<option value="Toyota"></option>
+										<option value="Volkswagen"></option>
+										<option value="Volvo"></option>
+										<option value="Yugo"></option>
+									</datalist> 
+								</div>
+								<div class="form-control-feedback"><small>Nom de la fabricant exemple : <code>Toyota</code></small></div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Model</label>
+								<div class="controls">
+									<input type="text" id="model" class="form-control" name="model" required value="{{v.model}}">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Type</label>
+								<div class="controls">
+									<input list="tp" class="form-control" autocomplete="off" name="type" id="type" placeholder="-Select-" required value="{{v.type}}">
+									<datalist id="tp">
+										 <option value="Car"></option>
+										 <option value="Bus"></option>
+										 <option value="Motorcycle"></option>
+										 <option value="Pickup Truck"></option>
+										 <option value="Semi Truck"></option>
+										 <option value="SUV"></option>
+										 <option value="Trailer"></option>
+										 <option value="ATV"></option>
+									</datalist>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Année</label>
+								<div class="controls">
+									<input type="number" id="annee" class="form-control" name="annee" required value="{{v.annee}}">
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Nombre des Place</label>
+								<div class="controls">
+									<input type="number" id="nombre" class="form-control" name="nombre" required value="{{v.nbPlace}}">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12 col-md-3">
+							<div class="form-group">
+								<label class="control-label col-form-label">VIN/NS</label>
+								<div class="controls">
+									<input type="text" id="vin" class="form-control" name="vin" required value="{{v.vin}}">
+								</div>
+								<div class="form-control-feedback"><small>Vehicule identification number <code>VIN</code></small></div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<div class="form-group">
+								<label class="control-label col-form-label">Matricule</label>
+								<div class="controls">
+									<input type="text" id="matricule" class="form-control" name="matricule" pattern="^[0-9]{3}[A-Z]{2}[0-9]{4}?$" title="EX: 123TU4567" required value="{{v.matricule}}">
+									<div class="form-control-feedback"><small>EXP: <code>123TU4567</code></small></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<div class="form-group">
+								<label class="control-label col-form-label">Etat d'enregistrement</label>
+								<input type="text" id="etat" class="form-control" name="etat" required value="{{v.etatEnreg}}">
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<div class="form-group">
+								<label class="control-label col-form-label">Prix</label>
+								<div class="controls">
+									<input type="number" id="prix" class="form-control" name="prix" required value="{{v.prix}}">
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<h4 class="card-title">Specifications</h4>
+					<div class="row">
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Couleur</label>
+								<input type="text" id="couleur" class="form-control" name="couleur" required value="{{v.coleur}}">
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Type de Roue</label>
+								<input type="text" id="Roue" class="form-control" name="Roue" required value="{{v.typeRoue}}">
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Kilométres</label>
+								<input type="text" id="kilo" class="form-control" name="kilo" required value="{{v.Kilometres}}">
+							</div>
+						</div>
+					</div>
+					<hr>
+					<h4 class="card-title">Classification</h4>
+					<div class="row">
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Status</label>
+								<input list="stat" id="status" class="form-control" autocomplete="off" name="status" placeholder="-Select-" required value="{{v.status}}">
+								<datalist id="stat">
+									<option value="Active"></option>
+									<option value="En Panne"></option>
+									<option value="Autre"></option>
+								</datalist> 
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Groupe</label>
+								<input list="grp" id="groupe" class="form-control" autocomplete="off" name="groupe" placeholder="-Select-" required value="{{v.groupe}}">
+								<datalist id="grp">
+									<option value="Managers"></option>
+									<option value="Security"></option>
+									<option value="Others"></option>
+								</datalist>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Ownership</label>
+								<input type="text" class="form-control" id="ownership" name="ownership" required value="{{v.ownership}}">
+							</div>
+						</div>
+					</div>
+					<hr>
+					<h4 class="card-title">Autres</h4>
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<label class="control-label col-form-label images">Remarks</label>
+								<input type="text" class="dont-validate" name="remarks" id="remarks">
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<label class="control-label col-form-label">Images de Véhicule</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text">Upload</span>
+									</div>
+									<div class="custom-file">
+										<input type="file" class="custom-file-input" id="images" name="images[]" multiple>
+										<label class="custom-file-label">Choose file</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="gallery"></div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="action-form">
+						<div class="form-group m-b-0 text-left">
+							<input type="submit" class="btn btn-info waves-effect waves-light" value="Modifier" id="btnSubmit"/>
+						</div>
+					</div>
+				</div>
+				
+			</form>
+		</div>
+	</div>
+</div> 
+
+{% endblock %}
+{% block javascript %}
+	<script type="text/javascript">
+$(document).ready(function () {
+
+ $("#btnSubmit").click(function () {
+  	$("input,select,textarea").not("[type=submit]").jqBootstrapValidation({
+  		submitSuccess: function($form, event){
+  			event.preventDefault();
+
+		    var form = $('#myform')[0];
+
+		    var data = new FormData(form);
+		    Notiflix.Loading.Circle('Veuillez patientez...');
+		    $("#btnSubmit").prop("disabled", true);
+		    $("#btnSubmit").unbind();
+  			$.ajax({
+	          type: "POST",
+	          enctype: 'multipart/form-data',
+	          url: "{{path ('vehicule_edit', {id: v.id})}}",
+	          data: data,
+	          processData: false,
+	          contentType: false,
+	          cache: false,
+	          timeout: 800000,
+	          success: function (data) {
+	          	  Notiflix.Loading.Remove();
+	              Notiflix.Notify.Success('Véhicule modifié avec succée');
+	              location.href="{{ path('vehicule_index') }}";
+	          },
+	          error: function (e) {
+	              $("#btnSubmit").prop("disabled", false);
+	              Notiflix.Notify.Error('Veuillez ressayez plus tard');
+	          }
+	      });
+  		}
+  	});
+  });
+});
+
+$(function() {
+    var imagesPreview = function(input, place) {
+
+        if (input.files) {
+            var filesAmount = input.files.length;
+
+            for (i = 0; i < filesAmount; i++) {
+                var reader = new FileReader();
+
+                reader.onload = function(event) {
+                    $($.parseHTML('<img>')).attr({
+                    	'src': event.target.result,
+                    	'class': 'upload',
+                    }).appendTo(place);
+                }
+
+                reader.readAsDataURL(input.files[i]);
+            }
+        }
+
+    };
+
+    $('#images').on('change', function() {
+        imagesPreview(this, 'div.gallery');
+    });
+});
+
+function checkNomV(){ 
+	var vNom = $("#vNom").val();
+	var error = document.getElementById("error");
+	var validate = $("#validate").val();
+	{% for v in vehicule %}
+		if (vNom == "{{v.vNom}}") {
+			error.style.display="block";
+			$("#btnSubmit").prop("disabled", true);
+			Notiflix.Notify.Error('Nom véhicule déja existe');
+		}else{
+			$("#btnSubmit").prop("disabled", false);
+			error.style.display="none";
+		}
+	{% endfor %}
+}
+</script>
+{% endblock %}

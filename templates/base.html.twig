@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}" rel="stylesheet"/>
+    <title>Polycars | {% block title %}{% endblock %}</title>
+    <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+	<link href="{{ asset('assets/extra-libs/jvector/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
+	<link href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
+    <style type="text/css">
+    .dont-validate{
+        display: block;
+        width: 100%;
+        height: calc(2.0625rem + 2px);
+        padding: .375rem .75rem;
+        font-size: .875rem;
+        line-height: 1.5;
+        color: #4F5467;
+        background-color: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 2px;transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    </style>
+	{% block stylesheets %}
+	
+	{% endblock %}
+</head>
+
+<body>
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+    
+    <div id="main-wrapper">
+        
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                <div class="navbar-header">
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
+					
+					<a class="navbar-brand" href="{{path ('default_index')}}">
+                        <!-- Logo icon -->
+                        <img src="{{ asset('assets/images/logo-blue.jpg') }}" alt="Accueil" class="light-logo" style="width: 60%;margin-left:20%;"/>
+                    
+                    <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="ti-more"></i></a>
+                </div>
+                
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    
+                    <ul class="navbar-nav float-left mr-auto">
+                        <li class="nav-item d-none d-md-block"><a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebartype="mini-sidebar"><i class="mdi mdi-menu font-24"></i></a></li>
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                             <span class="d-none d-md-block"><i class="icon-plus"></i>  Formulaire</span>
+                             <span class="d-block d-md-none"><i class="fa fa-plus"></i></span>   
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ path('default_new_bl') }}" >Besoin Logistique</a>
+                                <a class="dropdown-item" href="#">Ordre de Mission</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">...</a>
+                            </div>
+                        </li>
+                        
+                        <li class="nav-item search-box"> <a class="nav-link waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
+                            <form class="app-search position-absolute">
+                                <input type="text" class="form-control" placeholder="Chercher..."> <a class="srh-btn"><i class="ti-close"></i></a>
+                            </form>
+                        </li>
+					</ul>
+                    
+                    <ul class="navbar-nav float-right">
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-bell font-24"></i>
+                                
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right mailbox">
+                                <span class="with-arrow"><span class="bg-primary"></span></span>
+                                <ul class="list-style-none">
+                                    <li>
+                                        <div class="bg-primary text-white" style="padding: 11px 20px 15px;">
+                                            <h4 class="m-b-0 m-t-5">Notifications</h4>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="message-center notifications">
+                                            {% set notif = notif_service.list() %}
+                                            {% for n in notif|reverse %} 
+                                                <a href="{{n.link}}" class="message-item">
+                                                    {% if n.type == "Services" %}
+                                                    <span class="btn btn-info btn-circle"><i class="fa fa-wrench"></i></span>
+                                                    {% endif %}
+                                                    {% if n.type == "Fiche technique" %}
+                                                    <span class="btn btn-danger btn-circle"><i class="fa fa-file"></i></span>
+                                                    {% endif %}
+                                                    <div class="mail-contnet">
+                                                        <h5 class="message-title">{{n.title}}</h5> <span class="mail-desc">{{n.content}}</span> <span class="time">{{n.time|format_datetime("medium","short", locale="fr")}}</span> 
+                                                    </div>
+                                                </a>
+                                            {% else %}
+                                                <h5 class="text-muted text-center m-t-20">Aucun notification</h5>
+                                            {% endfor %}
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-center m-b-5 text-dark" href="javascript:void(0);"> <strong>Voir toutes les notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        {% if is_granted('ROLE_SUPER_ADMIN') == false %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-muted" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><svg aria-hidden="" aria-presentation="true" class="spark-icon-placeholder-wrapper spark-icon-placeholder ui-placeholder" height="32" version="1.1" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" fill="rgba(255,255,255,.8)" r="16"></circle><text alignment-baseline="central" dominant-baseline="central" fill="#78858A" font-size="10px" text-anchor="middle" x="16" y="16">{{app.user.nom|slice(0,1)|upper}}{{app.user.prenom|slice(0,1)|upper}}</text></svg></a>
+                            <div class="dropdown-menu dropdown-menu-right user-dd ">
+                                <span class="with-arrow"><span class="bg-primary"></span></span>
+                                <div class="d-flex no-block align-items-center p-15 bg-primary text-white m-b-10">
+                                    <div class="m-l-10">
+                                        <h4 class="m-b-0">{{app.user.nom}} {{app.user.prenom}}</h4>
+                                        <p class=" m-b-0"><u>#{{app.user.username}}</u></p>
+                                    </div>
+                                </div>
+                                <a class="dropdown-item" href="javascript:void(0)"  data-toggle="modal" data-target="#settingsModal"><i class="ti-user m-r-5 m-l-5"></i> Votre Compte</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ path('setting') }}"><i class="ti-settings m-r-5 m-l-5"></i> Parmètre</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ path('logout') }}"><i class="fa fa-power-off m-r-5 m-l-5"></i> Déconnexion</a>
+                                <div class="dropdown-divider"></div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        
+        <aside class="left-sidebar">
+            <div class="scroll-sidebar">
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark" href="{{ path('default_index') }}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Tableau de Bord</span></a></li>
+						<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-car"></i><span class="hide-menu">Véhicules</span></a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item"><a href="{{ path('vehicule_index') }}" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu">Liste des Véhicules</span></a></li>
+                                <li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Programme </span></a></li>
+                                <li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Affectations de Véhicules </span></a></li>
+                            </ul>
+                        </li>
+						<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-check-circle"></i><span class="hide-menu">Inspections </span></a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item"><a href="{{ path('inspection_index') }}" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Historique </span></a></li>
+                                <li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Calendrier </span></a></li>
+                            </ul>
+                        </li>
+						<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark" href="{{ path('issues_index') }}" aria-expanded="false"><i class="mdi mdi-alert-circle"></i><span class="hide-menu">Problèmes </span></a></li>
+						<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-wrench"></i><span class="hide-menu">Services </span></a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item"><a href="{{ path('services_index') }}" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Maintenance préventive </span></a></li>
+								<li class="sidebar-item"><a href="{{path ('suivi_index')}}" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Suivi fiche téchnique </span></a></li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-multiple"></i><span class="hide-menu">Contacts </span></a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item"><a href="{{ path('contacts_index') }}" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Les Agents </span></a></li>
+                                <li class="sidebar-item"><a href="{{ path('clients_index') }}" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Les Clients </span></a></li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-archive"></i><span class="hide-menu">archive </span></a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item"><a href="{{ path('archive_bl') }}" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Besoin Logistique </span></a></li>
+                                <li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Formulaires </span></a></li>
+                            </ul>
+                        </li>
+						<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark" href="repports.html" aria-expanded="false"><i class="mdi mdi-note-multiple"></i><span class="hide-menu">Rapports </span></a></li>
+					</ul>
+                </nav>
+            </div>
+        </aside>
+        <div class="page-wrapper">
+            {% block wrapper %}
+            {% endblock %}
+            <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-5 align-self-center">
+					{% block breadcrumb %}
+                        
+					{% endblock %}
+                    </div>
+					<div class="col-7 align-self-center">
+                        <div class="d-flex no-block justify-content-end align-items-center">
+                            {% block topRight %}
+								
+							{% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="container-fluid">
+			{% block container %}
+
+			{% endblock %}
+			</div>
+            {% if is_granted('ROLE_SUPER_ADMIN') == false %}
+            <div id="settingsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title text-center" id="myModalLabel">Votre Compte</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						</div>
+						<div class="modal-body">
+							<form method="POST" id="fupForm" action="{{path ('user_update', {id: app.user.id})}}" novalidate>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-sm-12 col-md-6">
+											<div class="form-group">
+												<label for="inputfname" class="control-label col-form-label">Nom</label>
+												<div class="controls">
+													<input type="text" class="form-control" value="{{app.user.nom}}" id="nom" name="nom" required required data-validation-required-message="This field is required">
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-12 col-md-6">
+											<div class="form-group">
+												<label for="inputlname2" class="control-label col-form-label">Prénom</label>
+												<div class="controls">
+													<input type="text" class="form-control" value="{{app.user.prenom}}" id="prenom" name="prenom" required required data-validation-required-message="This field is required">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 col-md-6">
+											<div class="form-group">
+												<label class="control-label col-form-label">Username</label>
+												<div class="controls">
+													<input type="text" class="dont-validate" value="{{app.user.username}}" id="username" name="username" readonly>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-12 col-md-6">
+											<div class="form-group">
+											<label class="control-label col-form-label">Email</label>
+												<div class="controls">
+													<input type="email" class="form-control" value="{{app.user.email}}" id="email" name="email" required required data-validation-required-message="This field is required">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 col-md-6">
+											<div class="form-group">
+												<label for="uname" class="control-label col-form-label">Num.Téléphone</label>
+												<div class="controls">
+													<input type="number" class="form-control" id="tel" value="{{app.user.tel}}" name="tel" required maxlength="8" minlength="8">
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-12 col-md-6">
+											<div class="form-group">
+												<label for="nname" class="control-label col-form-label">C.I.N</label>
+												<div class="controls">
+													<input type="number" class="form-control" id="cin" value="{{app.user.cin}}" name="cin" required maxlength="8" minlength="8">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12 col-md-6">
+											<div class="form-group">
+												<label for="nname" class="control-label col-form-label">Mot de passe</label>
+												<div class="controls">
+													<input type="password" class="form-control" id="password" name="password" required>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-12 col-md-6">
+											<div class="form-group">
+												<label for="nname" class="control-label col-form-label">Mot de passe</label>
+												<div class="controls">
+													<input type="password" class="form-control" data-validation-match-match="password" required>
+												</div>
+											</div>
+										</div>
+									</div>
+								<hr>
+									<div class="action-form">
+										<div class="form-group m-b-0 text-right">
+											<button type="submit" class="btn btn-info waves-effect waves-light" id="butsave">Modifier</button>&nbsp; 
+											<button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Fermer</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+            <footer class="footer text-center">
+				<b id="year"></b> - Logistique management system. <a href="javascript:void()">PolyGarde</a>.
+			</footer>
+        </div>
+        
+    </div>
+    
+	<script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
+	<script src="{{ asset('assets/libs/popper.js/dist/umd/popper.min.js') }}"></script>
+	<script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+	<script src="{{ asset('dist/js/app.min.js') }}"></script>
+	<script src="{{ asset('assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js') }}"></script>
+    <script src="{{ asset('dist/js/app.init.horizontal-fullwidth.js') }}"></script>
+    <script src="{{ asset('assets/extra-libs/Notiflix/dist/AIO/notiflix-aio-2.1.3.min.js') }}"></script>
+    <script src="{{ asset('dist/js/sidebarmenu.js') }}"></script>
+	<script src="{{ asset('assets/extra-libs/DataTables/datatables.min.js') }}"></script>
+	
+	<script src="{{ asset('assets/extra-libs/jqbootstrapvalidation/validation.js') }}"></script>
+    <script src="{{ asset('assets/libs/moment/moment.js') }}"></script>
+	<script src="{{ asset('assets/libs/moment/locale/fr.js') }}"></script>
+    <script src="{{ asset('dist/js/pages/samplepages/jquery.PrintArea.js') }}"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.j') }}s"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
+    <script src="{{ asset('dist/js/pages/forms/select2/select2.init.js') }}"></script>
+    <script src="{{ asset('dist/js/pages/datatable/buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('dist/js/pages/datatable/buttons/js/buttons.flash.min.js') }}"></script>
+    <script src="{{ asset('dist/js/pages/datatable/buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('dist/js/pages/datatable/buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('dist/js/custom.min.js') }}"></script>
+	{% block javascript %}
+	
+	{% endblock %}
+    <script type="text/javascript">
+    $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
+    var date = new Date();
+    var year = date.getFullYear();
+    document.getElementById("year").innerHTML=year;
+    </script>
+</body>
+
+</html>

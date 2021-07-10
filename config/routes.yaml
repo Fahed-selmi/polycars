@@ -1,0 +1,23 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+vehicule_index:
+    path: /vehicule
+    controller: App\Controller\VehiculeController::index
+inspection_index:
+    path: /inspection
+    controller: App\Controller\InspectionController::index
+issues_index:
+    path: /issues
+    controller: App\Controller\IssuesController::index
+services_index:
+    path: /services
+    controller: App\Controller\ServicesController::index
+contacts_index:
+    path: /contacts
+    controller: App\Controller\ContactsController::index
+app_login:
+    path: /login
+    controller: App\Controller\SecurityController::login
+logout:
+    path: /logout

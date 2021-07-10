@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Entity\Designation" table="designation">
+    <indexes>
+      <index name="id_besoin" columns="id_besoin"/>
+    </indexes>
+    <id name="idDes" type="integer" column="id_des">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="numDes" type="string" column="num_des" length="25" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="nature" type="string" column="nature" length="25" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="nbPers" type="integer" column="nb_pers" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="dateDep" type="date" column="date_dep" nullable="false"/>
+    <field name="dateArr" type="date" column="date_arr" nullable="false"/>
+    <many-to-one field="idBesoin" target-entity="Besoinlogistique" fetch="LAZY">
+      <join-columns>
+        <join-column name="id_besoin" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

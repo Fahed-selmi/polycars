@@ -1,0 +1,57 @@
+{% extends './base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block sidebar %}
+                    <ul id="sidebarnav">
+                        <!-- User Profile-->
+                        <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Personal</span></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark" href="{{ path('default_index') }}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard </span></a></li>
+						<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-car"></i><span class="hide-menu">Vehicules</span></a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item"><a href="{{ path('vehicule_index') }}" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Vehicule list </span></a></li>
+                                <li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Vehicule assignments </span></a></li>
+								<li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Meter history </span></a></li>
+                                <li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Expanse history </span></a></li>
+                            </ul>
+                        </li>
+						<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-check-circle"></i><span class="hide-menu">Inspections </span></a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item"><a href="{{ path('inspection_index') }}" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Inspection history </span></a></li>
+                                <li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Schedules </span></a></li>
+								<li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Forms </span></a></li>
+                            </ul>
+                        </li>
+						<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark" href="{{ path('issues_index') }}" aria-expanded="false"><i class="mdi mdi-alert-circle"></i><span class="hide-menu">Issues </span></a></li>
+						<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-wrench"></i><span class="hide-menu">Services </span></a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item"><a href="{{ path('services_index') }}" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Services history </span></a></li>
+                                <li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Services tasks </span></a></li>
+								<li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Services programs </span></a></li>
+                            </ul>
+                        </li>
+						<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-bell"></i><span class="hide-menu">Reminders </span></a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Services reminders </span></a></li>
+                                <li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Vehicule reminder </span></a></li>
+								<li class="sidebar-item"><a href="javascript:void(0)" class="sidebar-link"><i class="mdi mdi-adjust"></i><span class="hide-menu"> Contact reminder </span></a></li>
+                            </ul>
+                        </li>
+						<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark" href="{{ path('contacts_index') }}" aria-expanded="false"><i class="mdi mdi-account-multiple"></i><span class="hide-menu">Contacts </span></a></li>
+						<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark" href="{{ path('contacts_index') }}" aria-expanded="false"><i class="mdi mdi-archive"></i><span class="hide-menu">archive </span></a></li>
+						<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark" href="repports.html" aria-expanded="false"><i class="mdi mdi-note-multiple"></i><span class="hide-menu">Repports </span></a></li>
+                    </ul>
+				{% endblock %}
+{% block breadcrumb %}
+	<h4 class="page-title">Dashboard</h4>
+	<div class="d-flex align-items-center">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Home</a></li>
+			</ol>
+		</nav>
+	</div>
+{% endblock %}
+
+{% block container %}
+
+{% endblock %}

@@ -1,0 +1,54 @@
+<div class="card">
+	<div class="card-body">
+		<h3 class="card-title text-center mt-1">Liste des Clients</h3>
+        <div class="table-responsive m-t-10">
+            <table id="table-clients" class="table " style="width:100%">
+				<thead>
+					<tr>
+						<th><b>Options</b></th>
+						<th class="hide"><b>id</b></th>
+						<th><b>Nom</b></th>
+						<th><b>Prenom</b></th>
+						<th><b>Email</b></th>
+						<th><b>C.I.N</b></th>
+						<th><b>Num.Téléphone</b></th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for client in clients|reverse  %}
+					<tr id="row-{{client.id}}">
+						<td>
+							<a href="javascript:void()" class="btn btn-primary waves-effect waves-light" id="edit"><i class="ti-pencil-alt"></i></a>
+						</td>
+						<td class="hide">{{client.id}}</td>
+						<td>{{client.nom}}</td>
+						<td>{{client.prenom}}</td>
+						<td>{{client.email}}</td>
+						<td>{{client.cin}}</td>
+						<td>{{client.numTel}}</td>
+					</tr>
+					<script type="text/javascript">
+					 </script>
+				{% endfor %}
+				</tbody>
+				<tfoot>
+					<tr>
+						<th><b>Options</b></th>
+						<th class="hide"><b>id</b></th>
+						<th><b>Nom</b></th>
+						<th><b>Prenom</b></th>
+						<th><b>Email</b></th>
+						<th><b>C.I.N</b></th>
+						<th><b>Num.Téléphone</b></th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var table = $('#table-clients').DataTable({
+	"info":false,
+	"bLengthChange":false,
+});
+</script>

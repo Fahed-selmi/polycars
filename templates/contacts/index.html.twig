@@ -1,0 +1,208 @@
+{% extends './base.html.twig' %}
+
+{% block title %}Les Agents{% endblock %}
+
+{% block stylesheets %}
+<style type="text/css">
+.icn{
+	width:20%;
+}
+.upload{
+	width: 100%;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb %}
+	<h4 class="page-title">Les Agents</h4>
+	<div class="d-flex align-items-center">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="{{ path('default_index') }}">Accueil</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Les Agents</li>
+			</ol>
+		</nav>
+	</div>
+{% endblock %}
+
+{% block container %}
+<div class="align-self-center" id="row">
+	<div class="d-flex no-block justify-content-center" id="mytbl">
+		<div class="card container">
+			<div class="card-body">
+				<h3 class="card-title text-center mt-1">Liste des Agents</h3>
+                <div class="table-responsive m-t-10">
+                    <table id="table-agents" class="table " style="width:100%">
+						<thead>
+							<tr>
+								<th><b>Options</b></th>
+								<th class="hide"><b>id</b></th>
+								<th><b>Nom</b></th>
+								<th><b>Prenom</b></th>
+								<th><b>Email</b></th>
+								<th><b>Num.Téléphone</b></th>
+								<th><b>Role</b></th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for agent in agents|reverse %}
+							<tr id="row-{{agent.id}}">
+								<td>
+									<div class="btn-group">
+										<button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="ti-settings"></i>
+										</button>
+										<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 35px, 0px);">
+											<a class="dropdown-item" href="javascript:void()" id="edit"  data-toggle="modal" data-target="#user-{{agent.id}}"><i class="ti-pencil-alt"></i> Modifier</a>
+											<a class="dropdown-item" href="javascript:void()"  id="delete"><i class="ti-trash"></i> Supprimer</a>
+										</div>
+									</div>
+								</td>
+								<td class="hide">{{agent.id}}</td>
+								<td>{{agent.nom}}</td>
+								<td>{{agent.prenom}}</td>
+								<td><span class="label label-success">{{agent.email}}</span></td>
+								<td>{{agent.tel}}</td>
+								<td><span class="label label-primary">{{agent.role}}</span></td>
+							</tr>
+							<div id="user-{{agent.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-md">
+								    <div class="modal-content">
+								    	<div class="card">
+								    		<div class="modal-body">
+									    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+									    		<div class="card-body">
+									    			<form method="GET" action="{{path ('contacts_edit')}}" novalidate>
+														<div class="row">
+															<input type="text" class="form-control hide" id="id" name="id" required >
+															<div class="col-sm-12 col-lg-6">
+																<div class="form-group">
+																	<label class="control-label col-form-label">Nom</label>
+																	<div class="controls">
+																		<input type="text" class="form-control" id="nom" name="nom" value="{{agent.nom}}" required>
+																	</div>
+																</div>
+															</div>
+															<div class="col-sm-12 col-lg-6">
+																<div class="form-group">
+																	<label class="control-label col-form-label">Prénom</label>
+																	<div class="controls">
+																		<input type="text" class="form-control" id="prenom" name="prenom" value="{{agent.prenom}}" required>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-sm-12 col-lg-6">
+																<div class="form-group">
+																	<label class="control-label col-form-label">CIN</label>
+																	<div class="controls">
+																		<input type="number" class="form-control" id="cin" name="cin" value="{{agent.cin}}" required maxlength="8" minlength="8">
+																	</div>
+																</div>
+															</div>
+															<div class="col-sm-12 col-lg-6">
+																<div class="form-group">
+																	<label class="control-label col-form-label">Num.Téléphone</label>
+																	<div class="controls">
+																		<input type="number" class="form-control" id="tel" name="tel" value="{{agent.tel}}" required maxlength="8" minlength="8">
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="control-label col-form-label">Email</label>
+															<div class="controls">
+																<input type="email" value="{{agent.email}}" class="form-control" id="email" name="email">
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-sm-12 col-lg-6">
+																<div class="form-group">
+																	<label class="control-label col-form-label">Date de naissance</label>
+																	<div class="controls">
+																		<input type="date" class="form-control" id="dateN" name="dateN" value="{{agent.dateN|date('Y-m-d')}}" required >
+																	</div>
+																</div>
+															</div>
+															<div class="col-sm-12 col-lg-6">
+																<div class="form-group">
+																	<label class="control-label col-form-label">Role</label>
+																	<div class="controls">
+																		<input type="text" class="form-control" id="role" name="role" value="{{agent.role}}" required>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<hr>
+														<div class="action-form">
+															<div class="form-group m-b-0">
+																<button type="submit" class="btn btn-info waves-effect waves-light hide" id="btnEdit">Modifer</button>
+															</div>
+														</div>
+													</form>
+									    		</div>
+								    		</div>
+								    	</div>
+								    </div>
+								</div>
+							</div>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+$("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
+var table = $('#table-agents').DataTable({
+	"info":false,
+	"bLengthChange":false,
+	"ordering":false
+});
+Notiflix.Confirm.Init({
+	titleColor: '#f7094a',
+	okButtonBackground: '#f7094a',
+});
+
+$('#table-agents tbody').on('click','#delete',function(){
+	//GET THE SELECTED ROW;
+	var row = table.row($(this).closest('tr'));
+	var id = row.data()[1];
+	Notiflix.Confirm.Show(
+	'Veuillez Confirmer',
+	'Etes-vous sur de supprimer cela?',
+	'Oui',
+	'Non',
+	function(){ 
+		Notiflix.Loading.Circle('Veuillez patientez...');
+		$.ajax({
+			url: "{{path ('contacts_remove')}}",
+			type: "POST",
+			data: {
+				id: id				
+			},
+	        cache: false,
+	        timeout: 10000,
+			success: function(){
+				Notiflix.Notify.Warning('Supprimé avec succés');
+				setTimeout(table.row('#row-'+id).remove().draw(false), 2000);
+			},
+			error: function () {
+              Notiflix.Notify.Error('Veuillez ressayez plus tard');
+          }
+		});
+	},false);
+});
+
+$(document).ajaxStop(function(){
+	Notiflix.Loading.Remove();
+});
+</script>
+{% endblock %}

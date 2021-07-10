@@ -1,0 +1,521 @@
+{% extends './base.html.twig' %}
+
+{% block title %}Véhicules{% endblock %}
+
+{% block stylesheets %}
+<style type="text/css">
+.upload{
+	width:200px;
+	height: 200px;
+	margin: 1em;
+	border: solid black 1px;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb %}
+	<h4 class="page-title">Véhicules</h4>
+	<div class="d-flex align-items-center">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="{{ path('default_index') }}">Accueil</a></li>
+				<li class="breadcrumb-item " >Véhicules</li>
+				<li class="breadcrumb-item active" aria-current="page">Liste des Véhicules</li>
+			</ol>
+		</nav>
+	</div>
+{% endblock %}
+
+{% block topRight %}
+	<div class="m-r-10">
+		<div class="lastmonth"></div>
+	</div>
+	<div class="">
+		<button class="btn btn-info waves-effect waves-light" type="button" id="newV" onclick="show()"><span class="btn-label"><i class="fa fa-plus"></i></span> Nouveau Véhicule</button>
+	</div>
+{% endblock %}
+
+{% block container %}
+<div class="row" id="row">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<h3 class="card-title text-center mt-1">Liste des véhicules</h3>
+                <div class="table-responsive m-t-5">
+                    <table id="table-vehicule" class="table " style="width:100%">
+						<thead>
+							<tr>
+								<th><b>Options</b></th>
+								<th><b>Nom Vehicule</b></th>
+								<th><b>Status</b></th>
+								<th><b>Marke </b></th>
+								<th><b>Model</b></th>
+								<th><b>Type</b></th>
+								<th><b>Matricule</b></th>
+								<th><b>Groupe</b></th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for v in vehicule %}
+							<tr id="row-{{v.id}}">
+								<td>
+									<div class="btn-group" id="options-{{v.id}}">
+										<button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="ti-settings"></i>
+										</button>
+										<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 35px, 0px);">
+											<a class="dropdown-item" href="{{path ('vehicule_edit', {id: v.id})}}" class="trash" target="_blank"><i class="ti-pencil-alt"></i> Modifier</a>
+											<a class="dropdown-item" href="javascript:void()" onclick='var path = "{{path ('vehicule_remove', {id: v.id})}}"; deleteV(path,{{v.id}});' class="trash"><i class="ti-trash"></i> Supprimer</a>
+										</div>
+									</div>
+									<div class="spinner-grow spinner-grow-lg" role="status" id="spinner-{{v.id}}" style="display:none;">
+                                      <span class="sr-only">Loading...</span>
+                                    </div>
+								</td>
+								<td><a href="{{path ('vehicule_open', {id: v.id})}}" target="_blank" style="color:black;">{{v.vNom}}</td>
+								{% if v.status == "Active" %}
+								<td><i class="fa fa-circle text-success" data-toggle="tooltip" data-placement="top" title="Active"></i> Active</td>
+								{% endif %}
+								{% if v.status == "En Panne" %}
+								<td><i class="fa fa-circle" style="color:red;" data-toggle="tooltip" data-placement="top" title="En Panne"></i> En Panne</td>
+								{% endif %}
+								{% if v.status == "En Maintenance" %}
+								<td><i class="fa fa-circle text-orange" data-toggle="tooltip" data-placement="top" title="Maintenance préventive"></i> En Maintenance</td>
+								{% endif %}
+								<td>{{v.maker}}</td>
+								<td>{{v.model}}</td>
+								<td>{{v.type}}</td>
+								<td>
+									<span class="label label-primary">
+										{{v.matricule}}
+									</span>
+								</td>
+								<td>{{v.groupe}}</td>
+							</tr>
+							<script type="text/javascript">
+							 </script>
+						{% endfor %}
+						</tbody>
+						<tfoot>
+							<tr>
+								<th><b>Options</b></th>
+								<th><b>Nom Vehicule</b></th>
+								<th><b>Status</b></th>
+								<th><b>Marke </b></th>
+								<th><b>Model</b></th>
+								<th><b>Type</b></th>
+								<th><b>Matricule</b></th>
+								<th><b>Groupe</b></th>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="card" style="display:none;" id="formV">
+		<div class="card-body">
+			<form method="POST" enctype="multipart/form-data" id="myform" novalidate>
+				<div class="modal-body">
+					<h4 class="card-title">Details</h4>
+					<div class="row">
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group" id="validate">
+								<label class="control-label col-form-label">Nom Véhicule</label><a data-toggle="collapse" href="#options" aria-expanded="false" aria-controls="collapseExample" style="color:#6c757d;">  <i class="far fa-plus-square"></i></a>
+								<div class="controls">
+									<input type="text" id="vNom" class="form-control" name="vNom" required onkeyup="checkNomV()">
+									<div class="form-control-feedback">
+										<small><code id="error" style="display:none;">Nom de véhicule déja existe</code></small>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Fabricant</label>
+								<div class="controls">
+									<input list="fab" class="form-control" autocomplete="off" name="fabricant" id="fabricant" placeholder="-Select-" required>
+									<datalist id="fab">
+									 	<option value="AMC"></option>
+										<option value="Acura"></option>
+										<option value="Alfa Romeo"></option>
+										<option value="Aston Martin"></option>
+										<option value="Audi"></option>
+										<option value="Autocar"></option>
+										<option value="BCI"></option>
+										<option value="BMW"></option>
+										<option value="Caterpillar"></option>
+										<option value="Chevrolet"></option>
+										<option value="Chrysler"></option>
+										<option value="Crane Carrier"></option>
+										<option value="Daewoo"></option>
+										<option value="FIAT"></option>
+										<option value="Ford"></option>
+										<option value="GMC"></option>
+										<option value="Homesteader"></option>
+										<option value="Honda"></option>
+										<option value="Hyundai"></option>
+										<option value="Isuzu"></option>
+										<option value="Iveco"></option>
+										<option value="Jeep"></option>
+										<option value="Kia"></option>
+										<option value="Land Rover"></option>
+										<option value="Mack"></option>
+										<option value="Marmon"></option>
+										<option value="Maserati"></option>
+										<option value="Maybach"></option>
+										<option value="Mazda"></option>
+										<option value="Mercedes-Benz"></option>
+										<option value="Mitsubishi"></option>
+										<option value="Nissan"></option>
+										<option value="Panoz"></option>
+										<option value="Peterbilt"></option>
+										<option value="Pine Hillymouth"></option>
+										<option value="Pontiac"></option>
+										<option value="Ram"></option>
+										<option value="Renault"></option>
+										<option value="Saturn"></option>
+										<option value="ScaniaScion"></option>
+										<option value="Setra"></option>
+										<option value="Smart"></option>
+										<option value="Stealth Enterprises"></option>
+										<option value="Sterling"></option>
+										<option value="Subaru"></option>
+										<option value="Suzuki"></option>
+										<option value="Temsa"></option>
+										<option value="Terex"></option>
+										<option value="Tesla"></option>
+										<option value="Toyota"></option>
+										<option value="Volkswagen"></option>
+										<option value="Volvo"></option>
+										<option value="Yugo"></option>
+									</datalist> 
+								</div>
+								<div class="form-control-feedback"><small>Nom de la fabricant exemple : <code>Toyota</code></small></div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Model</label>
+								<div class="controls">
+									<input type="text" id="model" class="form-control" name="model" required>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row collapse" id="options">
+						<div class="col-md-4">
+							<label class="control-label col-form-label">Date leasing</label>
+							<input type="date" class="dont-validate" name="leasing">
+						</div>
+						<div class="col-md-4">
+							<label class="control-label col-form-label">Date visite</label>
+							<input type="date" class="dont-validate" name="visite">
+						</div>
+						<div class="col-md-4">
+							<label class="control-label col-form-label">date assurance</label>
+							<input type="date" class="dont-validate" name="assurance">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Type</label>
+								<div class="controls">
+									<input list="tp" class="form-control" autocomplete="off" name="type" id="type" placeholder="-Select-" required>
+									<datalist id="tp">
+										 <option value="Car"></option>
+										 <option value="Bus"></option>
+										 <option value="Motorcycle"></option>
+										 <option value="Pickup Truck"></option>
+										 <option value="Semi Truck"></option>
+										 <option value="SUV"></option>
+										 <option value="Trailer"></option>
+										 <option value="ATV"></option>
+									</datalist>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Année</label>
+								<div class="controls">
+									<input type="number" id="annee" class="form-control" name="annee" required>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Nombre des Place</label>
+								<div class="controls">
+									<input type="number" id="nombre" class="form-control" name="nombre" required>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12 col-md-3">
+							<div class="form-group">
+								<label class="control-label col-form-label">VIN/NS</label>
+								<div class="controls">
+									<input type="text" id="vin" class="form-control" name="vin" required>
+								</div>
+								<div class="form-control-feedback"><small>Vehicule identification number <code>VIN</code></small></div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<div class="form-group">
+								<label class="control-label col-form-label">Matricule</label>
+								<div class="controls">
+									<input type="text" id="matricule" class="form-control" name="matricule" pattern="^[0-9]{3}[A-Z]{2}[0-9]{4}?$" title="EX: 123TU4567" required>
+									<div class="form-control-feedback"><small>EXP: <code>123TU4567</code></small></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<div class="form-group">
+								<label class="control-label col-form-label">Etat d'enregistrement</label>
+								<input type="text" id="etat" class="form-control" name="etat" required>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-3">
+							<div class="form-group">
+								<label class="control-label col-form-label">Prix</label>
+								<div class="controls">
+									<input type="number" id="prix" class="form-control" name="prix" required>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<h4 class="card-title">Specifications</h4>
+					<div class="row">
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Couleur</label>
+								<input type="text" id="couleur" class="form-control" name="couleur" required>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Type de Roue</label>
+								<input type="text" id="Roue" class="form-control" name="Roue" required>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Kilométres</label>
+								<input type="text" id="kilo" class="form-control" name="kilo" required>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<h4 class="card-title">Classification</h4>
+					<div class="row">
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Status</label>
+								<input list="stat" id="status" class="form-control" autocomplete="off" name="status" placeholder="-Select-" required>
+								<datalist id="stat">
+									<option value="Active"></option>
+									<option value="En Panne"></option>
+									<option value="Autre"></option>
+								</datalist> 
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Groupe</label>
+								<input list="grp" id="groupe" class="form-control" autocomplete="off" name="groupe" placeholder="-Select-" required>
+								<datalist id="grp">
+									<option value="Managers"></option>
+									<option value="Security"></option>
+									<option value="Others"></option>
+								</datalist>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label col-form-label">Ownership</label>
+								<input type="text" class="form-control" id="ownership" name="ownership" required>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<h4 class="card-title">Autres</h4>
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<label class="control-label col-form-label images">Remarks</label>
+								<input type="text" class="dont-validate" name="remarks" id="remarks">
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<label class="control-label col-form-label">Images de Véhicule</label>
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text">Upload</span>
+									</div>
+									<div class="custom-file">
+										<input type="file" class="custom-file-input" id="images" name="images[]" multiple>
+										<label class="custom-file-label">Choose file</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="gallery"></div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="action-form">
+						<div class="form-group m-b-0 text-left">
+							<input type="submit" class="btn btn-info waves-effect waves-light" value="Ajouter" id="btnSubmit"/>
+						</div>
+					</div>
+				</div>
+				
+			</form>
+		</div>
+	</div>
+</div> 
+
+{% endblock %}
+
+{% block javascript %}
+ <script type="text/javascript">
+var table3 = $('#table-vehicule').DataTable();
+
+$(document).ready(function () {
+
+ $("#btnSubmit").click(function () {
+  	$("input,select,textarea").not("[type=submit]").jqBootstrapValidation({
+  		submitSuccess: function($form, event){
+  			event.preventDefault();
+  			$("#btnSubmit").unbind();
+		    var form = $('#myform')[0];
+
+		    var data = new FormData(form);
+
+		    $("#btnSubmit").prop("disabled", true);
+		    Notiflix.Loading.Circle('Veuillez patientez...');
+  			$.ajax({
+	          type: "POST",
+	          enctype: 'multipart/form-data',
+	          url: "{{path ('vehicule_index')}}",
+	          data: data,
+	          processData: false,
+	          contentType: false,
+	          cache: false,
+	          timeout: 800000,
+	          success: function (data) {
+	              $("#btnSubmit").prop("disabled", false);
+	              Notiflix.Notify.Info('Véhicule ajouté avec succée');
+	              Notiflix.Loading.Remove();
+	              location.href="{{ path('vehicule_index') }}";
+	          },
+	          error: function (e) {
+	              $("#btnSubmit").prop("disabled", false);
+	              Notiflix.Notify.Error('Veuillez ressayez plus tard');
+	          }
+	      });
+  		}
+  	});
+  });
+});
+
+function deleteV(path,id){
+	Notiflix.Confirm.Init({
+	titleColor: '#f7094a',
+	okButtonBackground: '#f7094a',
+});
+	Notiflix.Confirm.Show(
+	'Veuillez Confirmer',
+	'Etes-vous sur de supprimer cela?',
+	'Oui',
+	'Non',
+	function(){ 
+		Notiflix.Loading.Circle('Veuillez patientez...');
+		$.ajax({
+			url: path,
+			type: "POST",
+			data: {
+				etat: etat				
+			},
+			processData: false,
+	        contentType: false,
+	        cache: false,
+	        timeout: 10000,
+			success: function(){
+				Notiflix.Loading.Remove();
+				setTimeout(table3.row('#row-'+id).remove().draw(false), 2000);
+				Notiflix.Notify.Warning('Supprimé avec succés');
+			},
+			error: function (e) {
+              $("#btnSubmit").prop("disabled", false);
+              Notiflix.Notify.Error('Veuillez ressayez plus tard');
+          }
+		});
+	},false);
+}
+
+$(function() {
+    var imagesPreview = function(input, place) {
+
+        if (input.files) {
+            var filesAmount = input.files.length;
+
+            for (i = 0; i < filesAmount; i++) {
+                var reader = new FileReader();
+
+                reader.onload = function(event) {
+                    $($.parseHTML('<img>')).attr({
+                    	'src': event.target.result,
+                    	'class': 'upload',
+                    }).appendTo(place);
+                }
+
+                reader.readAsDataURL(input.files[i]);
+            }
+        }
+
+    };
+
+    $('#images').on('change', function() {
+        imagesPreview(this, 'div.gallery');
+    });
+});
+
+function show(){
+	var form = document.getElementById("formV");
+	var row = document.getElementById("row");
+	if (form.style.display=="none") {
+		form.style.display="block";
+		row.style.display="none";
+	}else{
+		form.style.display="none";
+		row.style.display="block";
+	}
+}
+
+function checkNomV(){ 
+	var vNom = $("#vNom").val();
+	var error = document.getElementById("error");
+	var validate = $("#validate").val();
+	{% for v in vehicule %}
+		if (vNom == "{{v.vNom}}") {
+			error.style.display="block";
+			$("#btnSubmit").prop("disabled", true);
+			Notiflix.Notify.Error('Nom véhicule déja existe');
+		}else{
+			error.style.display="none";
+			$("#btnSubmit").prop("disabled", false);
+		}
+	{% endfor %}
+}
+ </script> 
+{% endblock %}

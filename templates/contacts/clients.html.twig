@@ -1,0 +1,327 @@
+{% extends './base.html.twig' %}
+
+{% block title %}Clients{% endblock %}
+
+{% block stylesheets %}
+<style type="text/css">
+    .hide{
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block breadcrumb %}
+	<h4 class="page-title">Clients</h4>
+	<div class="d-flex align-items-center">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="{{ path('default_index') }}">Accueil</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Clients</li>
+			</ol>
+		</nav>
+	</div>
+{% endblock %}
+
+{% block container %}
+<div class="row" id="row">
+	<div class="col-sm-12 col-lg-8" id="mytbl">
+		<div class="card">
+			<div class="card-body">
+				<h3 class="card-title text-center mt-1">Liste des Clients</h3>
+                <div class="table-responsive m-t-10">
+                    <table id="table-clients" class="table " style="width:100%">
+						<thead>
+							<tr>
+								<th><b>Options</b></th>
+								<th class="hide"><b>id</b></th>
+								<th><b>Nom</b></th>
+								<th><b>Prenom</b></th>
+								<th><b>Email</b></th>
+								<th><b>C.I.N</b></th>
+								<th><b>Num.Téléphone</b></th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for client in clients|reverse %}
+							<tr id="row-{{client.id}}">
+								<td>
+									<div class="btn-group">
+										<button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="ti-settings"></i>
+										</button>
+										<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 35px, 0px);">
+											<a class="dropdown-item" href="javascript:void()" id="edit"><i class="ti-pencil-alt"></i> Modifier</a>
+											<a class="dropdown-item" href="javascript:void()"  id="delete"><i class="ti-trash"></i> Supprimer</a>
+										</div>
+									</div>
+								</td>
+								<td class="hide">{{client.id}}</td>
+								<td>{{client.nom}}</td>
+								<td>{{client.prenom}}</td>
+								<td>{{client.email}}</td>
+								<td>{{client.cin}}</td>
+								<td>{{client.numTel}}</td>
+							</tr>
+							<script type="text/javascript">
+							 </script>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-12 col-lg-4">
+		<div class="card">
+			<div class="card-body">
+				<form method="POST" id="fupForm" action="" novalidate>
+					<p style="text-align:end;"><a href="javascript:clear()">Vider</a></p>
+					<div class="row">
+						<input type="text" class="form-control hide" id="id" name="id" required >
+						<div class="col-sm-12 col-lg-6">
+							<div class="form-group">
+								<label class="control-label col-form-label">Nom</label>
+								<div class="controls">
+									<input type="text" class="form-control" id="nom" name="nom" required >
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-lg-6">
+							<div class="form-group">
+								<label class="control-label col-form-label">Prénom</label>
+								<div class="controls">
+									<input type="text" class="form-control" id="prenom" name="prenom" required>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-form-label">Email</label>
+						<div class="controls">
+							<input type="email" class="form-control" id="email" name="email" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-form-label">CIN</label>
+						<div class="controls">
+							<input type="number" class="form-control" id="cin" name="cin" required maxlength="8" minlength="8">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-form-label">Num.Téléphone</label>
+						<div class="controls">
+							<input type="number" class="form-control" id="tel" name="tel" required maxlength="8" minlength="8">
+						</div>
+					</div>
+					<hr>
+					<div class="action-form">
+						<div class="form-group m-b-0">
+							<button type="submit" class="btn btn-info waves-effect waves-light" id="btnAdd">Ajouter</button>
+							<button type="submit" class="btn btn-info waves-effect waves-light hide" id="btnEdit">Modifer</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+var table = $('#table-clients').DataTable({
+	"info":false,
+	"bLengthChange":false,
+	"ordering":false
+});
+Notiflix.Confirm.Init({
+	titleColor: '#f7094a',
+	okButtonBackground: '#f7094a',
+});
+function clear(){
+	var btnAdd = document.getElementById("btnAdd");
+	var btnEdit = document.getElementById("btnEdit");
+	var id = document.getElementById("id");
+	var nom = document.getElementById("nom");
+	var prenom = document.getElementById("prenom");
+	var email = document.getElementById("email");
+	var cin = document.getElementById("cin");
+	var tel = document.getElementById("tel");
+
+	//BUTTONS CONTROL
+	btnAdd.style.display="block";
+	btnEdit.style.display="none";
+
+	//EMPTY FORM VALUES
+	id.value = "";
+	nom.value = "";
+	prenom.value = "";
+	email.value = "";
+	cin.value = "";
+	tel.value = "";
+}
+
+$('#table-clients tbody').on('click','#edit',function(){
+		//GET THE SELECTED ROW;
+		var row = table.row($(this).closest('tr'));
+
+		//GET THE FORM INPUTS
+		var btnAdd = document.getElementById("btnAdd");
+		var btnEdit = document.getElementById("btnEdit");
+		var id = document.getElementById("id");
+		var nom = document.getElementById("nom");
+		var prenom = document.getElementById("prenom");
+		var email = document.getElementById("email");
+		var cin = document.getElementById("cin");
+		var tel = document.getElementById("tel");
+		//BUTTONS CONTROL
+		btnAdd.style.display="none";
+		btnEdit.style.display="block";
+
+		//INSERT TABLE VALUES TO FORM
+		id.value = row.data()[1];
+		nom.value = row.data()[2];
+		prenom.value = row.data()[3];
+		email.value = row.data()[4];
+		cin.value = row.data()[5];
+		tel.value = row.data()[6];
+});
+
+$('#table-clients tbody').on('click','#delete',function(){
+	//GET THE SELECTED ROW;
+	var row = table.row($(this).closest('tr'));
+	var id = row.data()[1];
+	Notiflix.Confirm.Show(
+	'Veuillez Confirmer',
+	'Etes-vous sur de supprimer cela?',
+	'Oui',
+	'Non',
+	function(){ 
+		Notiflix.Loading.Circle('Veuillez patientez...');
+		$.ajax({
+			url: "{{path ('clients_remove')}}",
+			type: "POST",
+			data: {
+				id: id				
+			},
+	        cache: false,
+	        timeout: 10000,
+			success: function(){
+				Notiflix.Notify.Warning('Supprimé avec succés');
+				setTimeout(table.row('#row-'+id).remove().draw(false), 2000);
+			},
+			error: function () {
+              Notiflix.Notify.Error('Veuillez ressayez plus tard');
+          }
+		});
+	},false);
+});
+
+$(document).ready(function () {
+	//MODIFIER
+	$("#btnEdit").click(function () {
+	  	$("input,select,textarea").not("[type=submit]").jqBootstrapValidation({
+	  		submitSuccess: function($form, event){
+	  			event.preventDefault();
+	  			event.stopPropagation();
+	  			$("#btnEdit").unbind();
+	  			
+	  			// GET DATA FROM FORM
+				var id = $("#id").val();
+				var nom = $("#nom").val();
+				var prenom = $("#prenom").val();
+				var email = $("#email").val();
+				var cin = $("#cin").val();
+				var tel = $("#tel").val();
+
+				//GET ROW INDEX
+				var row = table.row("#row-"+id);
+				var rowIndex = row.index();
+
+			    //DISABLE SUBMIT BUTTON
+			    $("#btnEdit").prop("disabled", true);
+			    Notiflix.Loading.Circle('Veuillez patientez...');
+	  			$.ajax({
+		          type: "POST",
+		          url: "{{path ('clients_index')}}",
+		          data: {
+						id: $("#id").val(),
+						nom: $("#nom").val(),
+						prenom: $("#prenom").val(),
+						email: $("#email").val(),
+						cin: $("#cin").val(),
+						tel: $("#tel").val()				
+					},
+		          cache: false,
+		          timeout: 800000,
+		          success: function (data) {
+		              $("#btnEdit").prop("disabled", false);
+		              Notiflix.Notify.Success('Modifié avec succée');
+
+		              //UPDATE TABLE
+					  table.cell({row:rowIndex,column:2}).data(nom);
+					  table.cell({row:rowIndex,column:3}).data(prenom);
+					  table.cell({row:rowIndex,column:4}).data(email);
+					  table.cell({row:rowIndex,column:5}).data(cin);
+					  table.cell({row:rowIndex,column:6}).data(tel);
+
+					  clear();
+		          },
+		          error: function (e) {
+		              $("#btnEdit").prop("disabled", false);
+		              Notiflix.Notify.Error('Veuillez ressayez plus tard');
+		          }
+		      	});
+	  		}
+	  	});
+	});
+	//AJOUTER
+	$("#btnAdd").click(function () {
+	  	$("input,select,textarea").not("[type=submit]").jqBootstrapValidation({
+	  		submitSuccess: function($form, event){
+	  			event.preventDefault();
+	  			event.stopPropagation();
+	  			$("#btnAdd").unbind();
+	  			
+	  			// GET DATA FROM FORM
+				var nom = $("#nom").val();
+				var prenom = $("#prenom").val();
+				var email = $("#email").val();
+				var cin = $("#cin").val();
+				var tel = $("#tel").val();
+
+			    //DISABLE SUBMIT BUTTON
+			    $("#btnAdd").prop("disabled", true);
+			    Notiflix.Loading.Circle('Veuillez patientez...');
+	  			$.ajax({
+		          type: "POST",
+		          url: "{{path ('clients_index')}}",
+		          data: {
+						nom: $("#nom").val(),
+						prenom: $("#prenom").val(),
+						email: $("#email").val(),
+						cin: $("#cin").val(),
+						tel: $("#tel").val()				
+					},
+		          cache: false,
+		          timeout: 800000,
+		          success: function (data) {
+		              $("#btnAdd").prop("disabled", false);
+		              Notiflix.Notify.Info('Ajouter avec succée');
+					  $('#mytbl').load("{{path ('clients_load')}}");
+					  clear();
+		          },
+		          error: function (e) {
+		              $("#btnAdd").prop("disabled", false);
+		              Notiflix.Notify.Error('Veuillez ressayez plus tard');
+		          }
+		      	});
+	  		}
+	  	});
+	});
+});
+$(document).ajaxStop(function(){
+	Notiflix.Loading.Remove();
+});
+</script>
+{% endblock %}

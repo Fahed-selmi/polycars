@@ -1,0 +1,133 @@
+{% extends './base.html.twig' %}
+
+{% block title %}Services{% endblock %}
+
+{% block breadcrumb %}
+	<h4 class="page-title">Services</h4>
+	<div class="d-flex align-items-center">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="{{ path('default_index') }}">Accueil</a></li>
+				<li class="breadcrumb-item" aria-current="page">Services</li>
+				<li class="breadcrumb-item active" aria-current="page">Maintenance préventive</li>
+			</ol>
+		</nav>
+	</div>
+{% endblock %}
+
+{% block container %}
+<div class="row" id="row">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<h3 class="card-title text-center mt-1">Liste des véhicules</h3>
+                <div class="table-responsive m-t-5">
+                    <table id="table-vehicule" class="table table-bordered" style="width:100%">
+						<thead>
+							<tr>
+								<th><b>Nom Vehicule</b></th>
+								<th><b>Matricule</b></th>
+								<th><b>Km Vehicule</b></th>
+								<th><b>Km </b></th>
+								<th><b>Filtre Huile </b></th>
+								<th><b>Filtre Gasoil</b></th>
+								<th><b>Filtre Air</b></th>
+								<th><b>Huile</b></th>
+								<th><b>Roue</b></th>
+								<th><b>Frein</b></th>
+								<th><b>Chaine</b></th>
+								<th><b>Visite</b></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for m in mp %}
+								{% if m.status  == "En Maintenance" %}
+									<tr>
+										<td>{{m.vNom}}</td>
+										<td>
+											<span class="label label-primary">{{m.matricule}}</span>
+										</td>
+										<td>{{m.kilometres}}</td>
+										<td>{{m.km}}</td>
+										{% if m.filtreHuile  == 0 %}
+										<td class="bg-danger text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+										{% if m.filtreHuile  == 1 %}
+										<td class="bg-success text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+
+										{% if m.filtreGasoil  == 0 %}
+										<td class="bg-danger text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+										{% if m.filtreGasoil  == 1 %}
+										<td class="bg-success text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+
+										{% if m.filtreAir  == 0 %}
+										<td class="bg-danger text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+										{% if m.filtreAir  == 1 %}
+										<td class="bg-success text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+
+										{% if m.huile  == 0 %}
+										<td class="bg-danger text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+										{% if m.huile  == 1 %}
+										<td class="bg-success text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+
+										{% if m.roue  == 0 %}
+										<td class="bg-danger text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+										{% if m.roue  == 1 %}
+										<td class="bg-success text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+
+										{% if m.frein  == 0 %}
+										<td class="bg-danger text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+										{% if m.frein  == 1 %}
+										<td class="bg-success text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+
+										{% if m.chaine  == 0 %}
+										<td class="bg-danger text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+										{% if m.chaine  == 1 %}
+										<td class="bg-success text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+
+										{% if m.visite  == 0 %}
+										<td class="bg-danger text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+										{% if m.visite  == 1 %}
+										<td class="bg-success text-center"><i class="fas fa-times fa-lg"></i></td>
+										{% endif %}
+									</tr>
+								{% endif %}
+							{% endfor %}
+						</tbody>
+						<tfoot>
+							<tr>
+								<th><b>Nom Vehicule</b></th>
+								<th><b>Matricule</b></th>
+								<th><b>Km Vehicule</b></th>
+								<th><b>Km </b></th>
+								<th><b>Filtre Huile </b></th>
+								<th><b>Filtre Gasoil</b></th>
+								<th><b>Filtre Air</b></th>
+								<th><b>Huile</b></th>
+								<th><b>Roue</b></th>
+								<th><b>Frein</b></th>
+								<th><b>Chaine</b></th>
+								<th><b>Visite</b></th>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

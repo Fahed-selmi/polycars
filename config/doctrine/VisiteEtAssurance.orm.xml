@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Entity\VisiteEtAssurance" table="visite_et_assurance">
+    <indexes>
+      <index name="FK_3116C33A292FFF1D" columns="vehicule"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="dateLeasing" type="date" column="date_leasing" nullable="false"/>
+    <field name="dateExpvisite" type="date" column="date_expVisite" nullable="false"/>
+    <field name="dateExpassurance" type="date" column="date_expAssurance" nullable="false"/>
+    <many-to-one field="vehicule" target-entity="Vehicule" fetch="LAZY">
+      <join-columns>
+        <join-column name="vehicule" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

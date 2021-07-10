@@ -1,0 +1,76 @@
+<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<h3 class="card-title text-center mt-1">Liste des véhicules</h3>
+				<div class="table-responsive">
+					<table id="zero_config" class="table ">
+						<thead>
+							<tr>
+								<th><b>Options</b></th>
+								<th><b>ID</b></th>
+								<th><b>Nom Vehicule</b></th>
+								<th><b>Status</b></th>
+								<th><b>Marke </b></th>
+								<th><b>Model</b></th>
+								<th><b>Type</b></th>
+								<th><b>Matricule</b></th>
+								<th><b>Groupe</b></th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for v in vehicule %}
+							<tr {% if v.status == "En Panne" %} style="background-color: #f704301f!important;" {% endif %}>
+								<td>
+									<div class="btn-group">
+										<button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="ti-settings"></i>
+										</button>
+										<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 35px, 0px);">
+											<a class="dropdown-item" target="_blank" href="/vehicule/vl/{{v.id}}"><i class="ti-eye"></i> Voir</a>
+											<a class="dropdown-item" href="/vehicule/edit/{{v.id}}"><i class="ti-check-box"></i> Modifier</a>
+											<a class="dropdown-item" onclick="deleteV({{b.id}});" href="javascript:void()" class="trash"><i class="ti-trash"></i> Supprimer</a>
+										</div>
+									</div>
+								</td>
+								<td>{{v.id}}</td>
+								<td>{{v.vNom}}</td>
+								{% if v.status == "Active" %}
+								<td><i class="fa fa-circle text-success" data-toggle="tooltip" data-placement="top" title="Active"></i> Active</td>
+								{% endif %}
+								{% if v.status == "En Panne" %}
+								<td><i class="fa fa-circle" style="color:red;" data-toggle="tooltip" data-placement="top" title="En Panne"></i> En Panne</td>
+								{% endif %}
+								{% if v.status == "Autre" %}
+								<td><i class="fa fa-circle text-orange" data-toggle="tooltip" data-placement="top" title="Autre"></i> Autre</td>
+								{% endif %}
+								<td>{{v.maker}}</td>
+								<td>{{v.model}}</td>
+								<td>{{v.type}}</td>
+								<td>
+									<span class="label label-primary">
+										{{v.matricule}}
+									</span>
+								</td>
+								<td>{{v.groupe}}</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+						<tfoot>
+							<tr>
+								<th><b>Options</b></th>
+								<th><b>ID</b></th>
+								<th><b>Nom Vehicule</b></th>
+								<th><b>Status</b></th>
+								<th><b>Marke </b></th>
+								<th><b>Model</b></th>
+								<th><b>Type</b></th>
+								<th><b>Matricule</b></th>
+								<th><b>Groupe</b></th>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">$('#zero_config').DataTable();</script>

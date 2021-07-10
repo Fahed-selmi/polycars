@@ -1,0 +1,53 @@
+{% extends './base.html.twig' %}
+
+{% block title %}Inspections{% endblock %}
+
+{% block breadcrumb %}
+	<h4 class="page-title">Inspections</h4>
+	<div class="d-flex align-items-center">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="{{ path('default_index') }}">Accueil</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Inspections</li>
+			</ol>
+		</nav>
+	</div>
+{% endblock %}
+
+{% block container %}
+	<div class="row" id="row">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<h3 class="card-title text-center mt-1">Liste des Inspections</h3>
+				<div class="table-responsive m-t-20">
+				    <table id="zero_config" class="table table-striped table-bordered">
+				        <thead>
+				        	<tr class="text-center">
+				                <th colspan="2"><b>Véhicule</b></th>
+				                <th colspan="3"><b>Check-List</b></th>
+				            </tr>
+				            <tr class="text-center">
+				                <th><b>Model</b></th>
+				                <th><b>Matricule</b></th>
+				                <th><b>Status</b></th>
+				                <th><b>Type de check-list</b></th>
+				                <th><b>Date d'inspection</b></th>
+				            </tr>
+				        </thead>
+				        <tbody>
+				            <tr>
+				                <td></td>
+				                <td><span class="label label-danger">Closed</span></td>
+				                <td><a href="ticket-detail.html" class="font-bold link"><span class="label label-danger">Closed</span></a></td>
+				                <td>Admin-Pro</td>
+				                <td>Admin-Pro</td>
+				            </tr>
+				        </tbody>
+				    </table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
