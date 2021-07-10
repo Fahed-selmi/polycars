@@ -17,7 +17,7 @@ class SecurityController extends AbstractController
         $loggedIn = $this->get('security.authorization_checker');
         if ($loggedIn->isGranted('IS_AUTHENTICATED_FULLY')) 
         {
-            return $this->redirectToRoute('default_index');
+            return $this->redirectToRoute('/');
         }
         $error = $authenticationUtils->getLastAuthenticationError();
 
