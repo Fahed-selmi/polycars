@@ -107,8 +107,8 @@ class ContactsController extends AbstractController
             $dateN = $request->get("dateN");
             $permis_img = $request->get("permis_img");
             
-
-            $agent->setNom($nom);
+            echo $nom;
+            $agent->setNom("$nom");
             $agent->setPrenom($prenom);
             $agent->setEmail($email);
             $agent->setCin($cin);
