@@ -5,7 +5,7 @@ The main purpose of this application is to help monitor the company's vehicules 
 
 ## DEMO
 Click here to explore the live [demo](http://sleepy-reef-79043.herokuapp.com/)
-|                |                          |               |              
+|           login     |        password                  |               |              
 |----------------|-------------------------------|-----------------------------|
 |admin |admin   |In app credentials          
 |fahed_s          |fahed   |From database credentials        
