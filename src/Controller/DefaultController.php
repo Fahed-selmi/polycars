@@ -155,7 +155,7 @@ class DefaultController extends AbstractController
 		$user->setTel($tel);
 		$user->setPassword($password);
 		
-		$em->flush();
+		//$em->flush();
 		
 		$this->addFlash('success', 'Utilisateur modifié avec succés');
         return $this->redirectToRoute('logout');
